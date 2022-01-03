@@ -13,13 +13,13 @@ Game::Game(void)
 {
     // nEnemies = GetRandomValue(5, 15);
 
-    enemies = 3;
+    nEnemies = 4;
 
     enemies = new std::vector<Entity>(nEnemies);
     player = new Entity;
     player->posX = SCREENWIDTH / 2;
     player->posY = SCREENHEIGHT / 2;
-    player->direction.x = 1;
+    player->direction.x = 0;
     player->direction.y = 0;
 }
 
@@ -54,26 +54,34 @@ void Game::tick() const
         en.posX += en.direction.x;
         en.posY += en.direction.y;
     }
-    player->posX += player->direction.x;
-    player->posY += player->direction.y;
+    // player->posX += player->direction.x;
+    // player->posY += player->direction.y;
 }
 
 void Game::getKeys() const
 {
-    if (IsKeyPressed(KEY_UP)) {
-        player->direction.x = 0;
-        player->direction.y = -2;
+    auto oldX = 0, oldY = 0;
+
+    oldX = player->posX;
+    oldY = player->posY;
+    if (IsKeyDown(KEY_UP)) {
+        player->posX += 0;
+        player->posY += -4;
     }
-    if (IsKeyPressed(KEY_DOWN)) {
-        player->direction.x = 0;
-        player->direction.y = 2;
+    if (IsKeyDown(KEY_DOWN)) {
+        player->posX += 0;
+        player->posY += 4;
     }
-    if (IsKeyPressed(KEY_LEFT)) {
-        player->direction.x = -2;
-        player->direction.y = 0;
+    if (IsKeyDown(KEY_LEFT)) {
+        player->posX += -4;
+        player->posY += 0;
     }
-    if (IsKeyPressed(KEY_RIGHT)) {
-        player->direction.x = 2;
-        player->direction.y = 0;
+    if (IsKeyDown(KEY_RIGHT)) {
+        player->posX += 4;
+        player->posY += 0;
+    }
+    if (oldX != player->posX || oldY != player->posY)
+    {
+        this->tick();
     }
 }

@@ -24,7 +24,6 @@ int main(void) {
         }
         case (GAMEPLAY):
         {
-            game->tick();
             break ;
         }
         case (ENDING):
