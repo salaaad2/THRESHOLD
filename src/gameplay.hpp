@@ -14,6 +14,15 @@ class Enemy {
         ~Enemy();
 };
 
+class Player {
+    public:
+        float posX;
+        float posY;
+        Vector2 direction;
+        Player();
+        ~Player();
+};
+
 class Game {
     int nEnemies;
 
@@ -24,6 +33,9 @@ class Game {
         ~Game();
 
         void start() const ;
+        void draw() const ;
+        void tick() const ;
+        void getKeys() const ;
 };
 
 #endif // GAMEPLAY_H_

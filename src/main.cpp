@@ -18,11 +18,13 @@ int main(void) {
             if (IsKeyPressed(KEY_ENTER))
             {
                 gs = GAMEPLAY;
+                game->start();
             }
             break ;
         }
         case (GAMEPLAY):
         {
+            game->tick();
             break ;
         }
         case (ENDING):
@@ -42,7 +44,8 @@ int main(void) {
         }
         case (GAMEPLAY):
         {
-            game->start();
+            game->getKeys();
+            game->draw();
             break ;
         }
         case (ENDING):
