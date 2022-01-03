@@ -3,27 +3,18 @@
 #include <iostream>
 
 
-Enemy::Enemy(void)
+Game::~Game()
 {
-    posX = GetRandomValue(0, SCREENWIDTH);
-    posY = GetRandomValue(0, SCREENHEIGHT);
-    if (static_cast<int>(posX) & 1)
-    {
-        direction = (Vector2){posX / 100, -posY / 100};
-    } else {
-        direction = (Vector2){-posX / 100, posY / 100};
-    }
-
+    delete enemies;
+    delete player;
 }
-
-Enemy::~Enemy() {}
-Game::~Game() {}
 
 Game::Game(void)
 {
     nEnemies = GetRandomValue(5, 15);
 
-    enemies = new std::vector<Enemy>(nEnemies);
+    enemies = new std::vector<Entity>(nEnemies);
+    player = new Entity;
 }
 
 void Game::start() const

@@ -2,31 +2,16 @@
 #define GAMEPLAY_H_
 
 #include "window.hpp"
+#include "entity.hpp"
 
 #include <vector>
-
-class Enemy {
-    public:
-        float posX;
-        float posY;
-        Vector2 direction;
-        Enemy();
-        ~Enemy();
-};
-
-class Player {
-    public:
-        float posX;
-        float posY;
-        Vector2 direction;
-        Player();
-        ~Player();
-};
 
 class Game {
     int nEnemies;
 
-    std::vector<Enemy> * enemies;
+    std::vector<Entity> * enemies;
+
+    Entity * player;
 
     public:
         Game();
