@@ -3,11 +3,13 @@
 
 #include "window.hpp"
 
+#include <vector>
+
 class Enemy {
-    float posX;
-    float posY;
-    Vector2 direction;
     public:
+        float posX;
+        float posY;
+        Vector2 direction;
         Enemy();
         ~Enemy();
 };
@@ -15,7 +17,7 @@ class Enemy {
 class Game {
     int nEnemies;
 
-    Enemy * enemies;
+    std::vector<Enemy> * enemies;
 
     public:
         Game();
