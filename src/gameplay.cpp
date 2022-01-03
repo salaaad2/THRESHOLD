@@ -2,6 +2,7 @@
 
 #include <iostream>
 
+#include "raymath.h"
 
 Game::~Game()
 {
@@ -19,8 +20,8 @@ Game::Game(void)
     player = new Entity;
     player->posX = SCREENWIDTH / 2;
     player->posY = SCREENHEIGHT / 2;
-    player->direction.x = 0;
-    player->direction.y = 0;
+    player->direction.x = 100;
+    player->direction.y = 100;
 }
 
 void Game::start() const
@@ -67,18 +68,25 @@ void Game::getKeys() const
     if (IsKeyDown(KEY_UP)) {
         player->posX += 0;
         player->posY += -4;
+        player->direction = Vector2Rotate(player->direction, -0.1f);
     }
     if (IsKeyDown(KEY_DOWN)) {
         player->posX += 0;
         player->posY += 4;
+        player->direction = Vector2Rotate(player->direction, 0.1f);
     }
     if (IsKeyDown(KEY_LEFT)) {
         player->posX += -4;
         player->posY += 0;
+        player->direction = Vector2Rotate(player->direction, -0.1f);
     }
     if (IsKeyDown(KEY_RIGHT)) {
         player->posX += 4;
         player->posY += 0;
+        player->direction = Vector2Rotate(player->direction, 0.1f);
+    }
+    if (IsKeyDown(KEY_SPACE)) {
+        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 30, RED);
     }
     if (oldX != player->posX || oldY != player->posY)
     {
