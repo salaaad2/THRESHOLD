@@ -11,10 +11,16 @@ Game::~Game()
 
 Game::Game(void)
 {
-    nEnemies = GetRandomValue(5, 15);
+    // nEnemies = GetRandomValue(5, 15);
+
+    enemies = 3;
 
     enemies = new std::vector<Entity>(nEnemies);
     player = new Entity;
+    player->posX = SCREENWIDTH / 2;
+    player->posY = SCREENHEIGHT / 2;
+    player->direction.x = 1;
+    player->direction.y = 0;
 }
 
 void Game::start() const
@@ -29,6 +35,7 @@ void Game::draw() const
     {
         DrawCircleV((Vector2){en.posX, en.posY}, 10, RED);
     }
+    DrawCircleV((Vector2){player->posX, player->posY}, 10, GREEN);
 }
 
 
@@ -47,8 +54,26 @@ void Game::tick() const
         en.posX += en.direction.x;
         en.posY += en.direction.y;
     }
+    player->posX += player->direction.x;
+    player->posY += player->direction.y;
 }
 
 void Game::getKeys() const
 {
+    if (IsKeyPressed(KEY_UP)) {
+        player->direction.x = 0;
+        player->direction.y = -2;
+    }
+    if (IsKeyPressed(KEY_DOWN)) {
+        player->direction.x = 0;
+        player->direction.y = 2;
+    }
+    if (IsKeyPressed(KEY_LEFT)) {
+        player->direction.x = -2;
+        player->direction.y = 0;
+    }
+    if (IsKeyPressed(KEY_RIGHT)) {
+        player->direction.x = 2;
+        player->direction.y = 0;
+    }
 }
