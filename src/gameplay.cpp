@@ -15,6 +15,7 @@ Game::Game(std::string const & path)
 {
     std::ifstream ifs(path);
     std::string tok;
+    auto radius = 10;
 
     std::cout << "Init: reading map file [" << path << "]" << std::endl;
     while (ifs >> tok)
@@ -22,16 +23,23 @@ Game::Game(std::string const & path)
         if (tok == "E")
         {
             ifs >> tok;
-            std::cout << "will spawn " << tok << " enemies" << std::endl;
+            std::cout << "will spawn " << tok << " enemies";
             nEnemies = std::atoi(tok.c_str());
+            ifs >> tok;
+            radius = std::atoi(tok.c_str());
         }
     }
     enemies = new std::vector<Entity>(nEnemies);
+    for (auto en = enemies->begin(); en != enemies->end(); en++) {
+        en->radius = radius;
+    }
     player = new Entity;
     player->posX = SCREENWIDTH / 2;
     player->posY = SCREENHEIGHT / 2;
     player->direction.x = 100;
     player->direction.y = 100;
+    player->radius = 10;
+    ifs.close();
 }
 
 Game::~Game()
@@ -51,7 +59,7 @@ void Game::draw() const
     auto left = std::to_string(nEnemies);
     for (auto & en : *enemies)
     {
-        DrawCircleV((Vector2){en.posX, en.posY}, 10, RED);
+        DrawCircleV((Vector2){en.posX, en.posY}, en.radius, RED);
     }
     DrawCircleV((Vector2){player->posX, player->posY}, 10, GREEN);
     DrawText("Enemies left : ", 10, 10, 20, GREEN);
@@ -112,7 +120,8 @@ int Game::getKeys() const
     if (IsKeyPressed(KEY_SPACE)) {
         for (auto en = enemies->begin(); en != enemies->end(); en++)
         {
-            if (CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 20))
+            if (CheckCollisionPointLine((Vector2){en->posX, en->posY},
+                                        (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), (en->radius * 2)))
             {
               std::cout << "hit enemy at " << en->posX << "|" << en->posY
                         << std::endl;
@@ -120,15 +129,14 @@ int Game::getKeys() const
               return (0);
             }
         }
-        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 20, RED);
-
+        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, (Vector2){player->direction.x + 15, player->direction.y + 15}), 10, ORANGE);
+        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, (Vector2){player->direction.x + 7, player->direction.y + 7}), 10, ORANGE);
+        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 10, ORANGE);
+        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, (Vector2){player->direction.x - 7, player->direction.y - 7}), 10, ORANGE);
+        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, (Vector2){player->direction.x - 15, player->direction.y - 15}), 10, ORANGE);
     }
-    if (oldX != player->posX ||
-        oldY != player->posY)
-    {
-        if (this->tick()) {
-            return (1);
-        }
+    if (this->tick()) {
+        return (1);
     }
     aimer.x = (player->direction.x / 3);
     aimer.y = (player->direction.y / 3);

@@ -16,6 +16,7 @@
 class Entity {
     public:
         int hp;
+        int radius;
         float posX;
         float posY;
         Vector2 direction;
