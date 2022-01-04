@@ -19,8 +19,8 @@ class Game {
 
         void start() const ;
         void draw() const ;
-        void tick() const ;
-        void getKeys() const ;
+        int tick() const ;
+        int getKeys() const ;
 };
 
 #endif // GAMEPLAY_H_

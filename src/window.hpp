@@ -5,8 +5,8 @@
 
 int initWindow(void);
 
-#define SCREENWIDTH  800
-#define SCREENHEIGHT 450
+#define SCREENWIDTH  1600
+#define SCREENHEIGHT 900
 
 typedef enum gameState {
 TITLE = 0, GAMEPLAY, ENDING

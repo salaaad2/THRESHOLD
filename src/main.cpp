@@ -1,3 +1,12 @@
+/*********************************/
+/*   THRESHOLD        (  //      */
+/*   main              ( )/      */
+/*   by salade         )(/       */
+/*  ________________  ( /)       */
+/* ()__)____________)))))   :^}  */
+/*********************************/
+
+
 #include "window.hpp"
 #include "gameplay.hpp"
 #include <iostream>
@@ -28,6 +37,10 @@ int main(void) {
         }
         case (ENDING):
         {
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                gs = TITLE;
+            }
             break ;
         }
     }
@@ -38,18 +51,22 @@ int main(void) {
     switch (gs) {
         case (TITLE):
         {
-            DrawText("LOGO SCREEN", 20, 20, 40, LIGHTGRAY);
+            DrawText("THRESHOLD", (SCREENWIDTH / 2) - 150, SCREENHEIGHT / 2, 40, RED);
+            DrawText("PRESS ENTER", (SCREENWIDTH / 2) - 150, (SCREENHEIGHT / 2) + 50, 40, MAROON);
             break ;
         }
         case (GAMEPLAY):
         {
-            game->getKeys();
+            if (game->getKeys()) {
+                gs = ENDING;
+            }
             game->draw();
             break ;
         }
         case (ENDING):
         {
-            DrawText("GOOD BYE SCREEN", 20, 20, 40, LIGHTGRAY);
+            DrawCircle(SCREENWIDTH / 2, SCREENHEIGHT / 2, 200, BLACK);
+            DrawText("GOOD BYE", (SCREENWIDTH / 2) - 100, SCREENHEIGHT / 2, 40, WHITE);
             break ;
         }
     }

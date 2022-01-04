@@ -6,9 +6,7 @@
 
 Game::Game(void)
 {
-    // nEnemies = GetRandomValue(5, 15);
-
-    nEnemies = 4;
+    nEnemies = 9;
 
     enemies = new std::vector<Entity>(nEnemies);
     player = new Entity;
@@ -43,7 +41,7 @@ void Game::draw() const
 }
 
 
-void Game::tick() const
+int Game::tick() const
 {
     for (auto & en : *enemies)
     {
@@ -60,11 +58,13 @@ void Game::tick() const
         if (CheckCollisionCircles((Vector2){player->posX, player->posY}, 10,
                                   (Vector2){en.posX, en.posY}, 10)) {
             std::cout << "you died" << std::endl;
+            return (1);
         }
     }
+    return (0);
 }
 
-void Game::getKeys() const
+int Game::getKeys() const
 {
     auto oldX = 0, oldY = 0;
     auto aimer = player->direction;
@@ -102,11 +102,15 @@ void Game::getKeys() const
         DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 20, RED);
 
     }
-    if (oldX != player->posX || oldY != player->posY)
+    if (oldX != player->posX ||
+        oldY != player->posY)
     {
-        this->tick();
+        if (this->tick()) {
+            return (1);
+        }
     }
     aimer.x = (player->direction.x / 3);
     aimer.y = (player->direction.y / 3);
     DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, aimer), 5, GREEN);
+    return (0);
 }
