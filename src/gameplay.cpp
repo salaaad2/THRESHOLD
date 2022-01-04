@@ -4,12 +4,6 @@
 
 #include "raymath.h"
 
-Game::~Game()
-{
-    delete enemies;
-    delete player;
-}
-
 Game::Game(void)
 {
     // nEnemies = GetRandomValue(5, 15);
@@ -22,6 +16,12 @@ Game::Game(void)
     player->posY = SCREENHEIGHT / 2;
     player->direction.x = 100;
     player->direction.y = 100;
+}
+
+Game::~Game()
+{
+    delete enemies;
+    delete player;
 }
 
 void Game::start() const
@@ -55,41 +55,45 @@ void Game::tick() const
         en.posX += en.direction.x;
         en.posY += en.direction.y;
     }
-    // player->posX += player->direction.x;
-    // player->posY += player->direction.y;
 }
 
 void Game::getKeys() const
 {
     auto oldX = 0, oldY = 0;
+    auto aimer = player->direction;
 
     oldX = player->posX;
     oldY = player->posY;
-    if (IsKeyDown(KEY_UP)) {
+    if (IsKeyDown(KEY_W)) {
         player->posX += 0;
         player->posY += -4;
-        player->direction = Vector2Rotate(player->direction, -0.1f);
     }
-    if (IsKeyDown(KEY_DOWN)) {
+    if (IsKeyDown(KEY_S)) {
         player->posX += 0;
         player->posY += 4;
-        player->direction = Vector2Rotate(player->direction, 0.1f);
     }
-    if (IsKeyDown(KEY_LEFT)) {
+    if (IsKeyDown(KEY_A)) {
         player->posX += -4;
         player->posY += 0;
-        player->direction = Vector2Rotate(player->direction, -0.1f);
     }
-    if (IsKeyDown(KEY_RIGHT)) {
+    if (IsKeyDown(KEY_D)) {
         player->posX += 4;
         player->posY += 0;
+    }
+    if (IsKeyDown(KEY_LEFT)) {
+        player->direction = Vector2Rotate(player->direction, -0.1f); // left
+    }
+    if (IsKeyDown(KEY_RIGHT)) {
         player->direction = Vector2Rotate(player->direction, 0.1f);
     }
-    if (IsKeyDown(KEY_SPACE)) {
-        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 30, RED);
+    if (IsKeyPressed(KEY_SPACE)) {
+        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 20, RED);
     }
     if (oldX != player->posX || oldY != player->posY)
     {
         this->tick();
     }
+    aimer.x = (player->direction.x / 3);
+    aimer.y = (player->direction.y / 3);
+    DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, aimer), 5, GREEN);
 }
