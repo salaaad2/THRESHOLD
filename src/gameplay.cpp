@@ -1,3 +1,11 @@
+/*********************************/
+/*   THRESHOLD        (  //      */
+/*   gameplay          ( )/      */
+/*   by salade         )(/       */
+/*  ________________  ( /)       */
+/* ()__)____________)))))   :^}  */
+/*********************************/
+
 #include "gameplay.hpp"
 
 #include <iostream>
@@ -6,7 +14,7 @@
 
 Game::Game(void)
 {
-    nEnemies = 9;
+    nEnemies = 10;
 
     enemies = new std::vector<Entity>(nEnemies);
     player = new Entity;
@@ -45,8 +53,6 @@ int Game::tick() const
 {
     for (auto & en : *enemies)
     {
-        if (!en.hp)
-        { continue ; }
         if (en.posX >= SCREENWIDTH || en.posX <= 0) {
           en.direction.x = -en.direction.x;
         }
