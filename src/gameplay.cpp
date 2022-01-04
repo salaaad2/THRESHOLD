@@ -124,11 +124,16 @@ int Game::getKeys() const
         player->direction = Vector2Rotate(player->direction, 0.1f);
     }
     if (IsKeyPressed(KEY_SPACE)) {
+        auto rot1 = Vector2Rotate(player->direction, -0.2f);
+        auto rot2 = Vector2Rotate(player->direction, 0.2f);
+
+        auto add1 = Vector2Add((Vector2){player->posX, player->posY}, rot1);
+        auto add2 = Vector2Add((Vector2){player->posX, player->posY}, rot2);
         for (auto en = enemies->begin(); en != enemies->end(); en++)
         {
-            if (CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, Vector2Rotate(player->direction, -0.2f)), (en->radius * 2)) ||
+            if (CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, add1, (en->radius * 2)) ||
                 CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, Vector2Rotate(player->direction, 0.0f)), (en->radius * 2)) ||
-                CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, Vector2Rotate(player->direction, 0.2f)), (en->radius * 2)))
+                CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, add2, (en->radius * 2)))
             {
               std::cout << "hit enemy at " << en->posX << "|" << en->posY
                         << std::endl;
@@ -137,9 +142,9 @@ int Game::getKeys() const
               return (0);
             }
         }
-        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, Vector2Rotate(player->direction, -0.2f)), 10, ORANGE);
+        DrawLineEx((Vector2){player->posX, player->posY}, add1, 10, ORANGE);
         DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 10, ORANGE);
-        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, Vector2Rotate(player->direction, 0.2f)), 10, ORANGE);
+        DrawLineEx((Vector2){player->posX, player->posY}, add2, 10, ORANGE);
     }
     if (player->threshold)
     {
@@ -155,7 +160,6 @@ int Game::getKeys() const
             return (1);
         }
     }
-
     aimer.x = (player->direction.x / 3);
     aimer.y = (player->direction.y / 3);
     DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, aimer), 5, GREEN);
