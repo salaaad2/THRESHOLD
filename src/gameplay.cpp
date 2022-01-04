@@ -8,14 +8,24 @@
 
 #include "gameplay.hpp"
 
-#include <iostream>
-
 #include "raymath.h"
+#include <fstream>
 
-Game::Game(void)
+Game::Game(std::string const & path)
 {
-    nEnemies = 10;
+    std::ifstream ifs(path);
+    std::string tok;
 
+    std::cout << "Init: reading map file [" << path << "]" << std::endl;
+    while (ifs >> tok)
+    {
+        if (tok == "E")
+        {
+            ifs >> tok;
+            std::cout << "will spawn " << tok << " enemies" << std::endl;
+            nEnemies = std::atoi(tok.c_str());
+        }
+    }
     enemies = new std::vector<Entity>(nEnemies);
     player = new Entity;
     player->posX = SCREENWIDTH / 2;
@@ -107,6 +117,7 @@ int Game::getKeys() const
               std::cout << "hit enemy at " << en->posX << "|" << en->posY
                         << std::endl;
               enemies->erase(en);
+              return (0);
             }
         }
         DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 20, RED);

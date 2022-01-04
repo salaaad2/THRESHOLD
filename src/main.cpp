@@ -13,7 +13,7 @@
 
 gameState gs = TITLE;
 
-Game* game = new Game;
+Game* game = new Game("../meta/maps/stage_1_start.bfm");
 
 int main(void) {
   initWindow();
@@ -41,7 +41,7 @@ int main(void) {
             {
                 gs = TITLE;
                 delete game;
-                game = new Game;
+                game = new Game("../meta/maps/stage_1_start.bfm");
             }
             break ;
         }

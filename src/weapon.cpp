@@ -8,9 +8,8 @@
 
 #include "weapon.hpp"
 
-Weapon::Weapon()
-{
-
-}
+Weapon::Weapon(float const & rg, unsigned int const & dmg) :
+    range(rg), damage(dmg)
+{}
 
 Weapon::~Weapon() {}

@@ -13,6 +13,7 @@
 #include "entity.hpp"
 
 #include <vector>
+#include <iostream>
 
 class Game {
     int nEnemies;
@@ -22,7 +23,7 @@ class Game {
     Entity * player;
 
     public:
-        Game();
+        Game(std::string const & path);
         ~Game();
 
         void start() const ;

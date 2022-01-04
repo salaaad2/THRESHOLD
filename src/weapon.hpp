@@ -11,7 +11,9 @@
 
 class Weapon {
     public:
-        Weapon();
+        float const & range;
+        unsigned int const & damage;
+        Weapon(float const & rg, unsigned int const & dmg);
         ~Weapon();
 };
 
