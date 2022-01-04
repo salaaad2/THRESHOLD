@@ -1,6 +1,6 @@
 #include "entity.hpp"
 
-Entity::Entity(void)
+Entity::Entity(void) : hp(1)
 {
     posX = GetRandomValue(0, SCREENWIDTH);
     posY = GetRandomValue(0, SCREENHEIGHT);

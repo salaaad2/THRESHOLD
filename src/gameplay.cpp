@@ -32,11 +32,14 @@ void Game::start() const
 
 void Game::draw() const
 {
+    auto left = std::to_string(nEnemies);
     for (auto & en : *enemies)
     {
         DrawCircleV((Vector2){en.posX, en.posY}, 10, RED);
     }
     DrawCircleV((Vector2){player->posX, player->posY}, 10, GREEN);
+    DrawText("Enemies left : ", 10, 10, 20, GREEN);
+    DrawText(left.c_str(), 150, 10, 20,RED);
 }
 
 
@@ -44,16 +47,20 @@ void Game::tick() const
 {
     for (auto & en : *enemies)
     {
-        if (en.posX >= SCREENWIDTH || en.posX <= 0)
-        {
-            en.direction.x = -en.direction.x;
+        if (!en.hp)
+        { continue ; }
+        if (en.posX >= SCREENWIDTH || en.posX <= 0) {
+          en.direction.x = -en.direction.x;
         }
-        if (en.posY >= SCREENHEIGHT || en.posY <= 0)
-        {
-            en.direction.y = -en.direction.y;
+        if (en.posY >= SCREENHEIGHT || en.posY <= 0) {
+          en.direction.y = -en.direction.y;
         }
         en.posX += en.direction.x;
         en.posY += en.direction.y;
+        if (CheckCollisionCircles((Vector2){player->posX, player->posY}, 10,
+                                  (Vector2){en.posX, en.posY}, 10)) {
+            std::cout << "you died" << std::endl;
+        }
     }
 }
 
@@ -87,7 +94,13 @@ void Game::getKeys() const
         player->direction = Vector2Rotate(player->direction, 0.1f);
     }
     if (IsKeyPressed(KEY_SPACE)) {
+        for (auto & en : *enemies)
+        {
+            if (CheckCollisionPointLine((Vector2){en.posX, en.posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 20))
+                std::cout << "hit enemy at " << en.posX << "|" << en.posY << std::endl;
+        }
         DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 20, RED);
+
     }
     if (oldX != player->posX || oldY != player->posY)
     {

@@ -5,6 +5,7 @@
 
 class Entity {
     public:
+        int hp;
         float posX;
         float posY;
         Vector2 direction;
