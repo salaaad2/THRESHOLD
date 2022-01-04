@@ -17,6 +17,8 @@ class Entity {
     public:
         int hp;
         int radius;
+        int victims;
+        bool threshold;
         float posX;
         float posY;
         Vector2 direction;

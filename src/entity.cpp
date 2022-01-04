@@ -18,6 +18,7 @@ Entity::Entity(void) : hp(1)
         direction = (Vector2){-posX / 100, posY / 100};
     }
     radius = 10;
+    threshold = false;
 }
 
 Entity::~Entity() {}

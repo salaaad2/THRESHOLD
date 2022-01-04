@@ -56,7 +56,7 @@ void Game::start() const
 
 void Game::draw() const
 {
-    auto left = std::to_string(nEnemies);
+    auto left = std::to_string(enemies->size());
     for (auto & en : *enemies)
     {
         DrawCircleV((Vector2){en.posX, en.posY}, en.radius, RED);
@@ -64,6 +64,9 @@ void Game::draw() const
     DrawCircleV((Vector2){player->posX, player->posY}, 10, GREEN);
     DrawText("Enemies left : ", 10, 10, 20, GREEN);
     DrawText(left.c_str(), 150, 10, 20,RED);
+    if (player->victims >= 5) {
+        DrawText("[E] FURY", SCREENWIDTH - 150, 10, 50, RED);
+    }
 }
 
 
@@ -111,6 +114,9 @@ int Game::getKeys() const
         player->posX += 4;
         player->posY += 0;
     }
+    if (player->victims >= 5 && IsKeyDown(KEY_E)) {
+        player->threshold = true;
+    }
     if (IsKeyDown(KEY_LEFT)) {
         player->direction = Vector2Rotate(player->direction, -0.1f); // left
     }
@@ -120,24 +126,36 @@ int Game::getKeys() const
     if (IsKeyPressed(KEY_SPACE)) {
         for (auto en = enemies->begin(); en != enemies->end(); en++)
         {
-            if (CheckCollisionPointLine((Vector2){en->posX, en->posY},
-                                        (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), (en->radius * 2)))
+            if (CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, Vector2Rotate(player->direction, -0.2f)), (en->radius * 2)) ||
+                CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, Vector2Rotate(player->direction, 0.0f)), (en->radius * 2)) ||
+                CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, Vector2Rotate(player->direction, 0.2f)), (en->radius * 2)))
             {
               std::cout << "hit enemy at " << en->posX << "|" << en->posY
                         << std::endl;
               enemies->erase(en);
+              player->victims++;
               return (0);
             }
         }
-        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, (Vector2){player->direction.x + 15, player->direction.y + 15}), 10, ORANGE);
-        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, (Vector2){player->direction.x + 7, player->direction.y + 7}), 10, ORANGE);
+        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, Vector2Rotate(player->direction, -0.2f)), 10, ORANGE);
         DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 10, ORANGE);
-        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, (Vector2){player->direction.x - 7, player->direction.y - 7}), 10, ORANGE);
-        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, (Vector2){player->direction.x - 15, player->direction.y - 15}), 10, ORANGE);
+        DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, Vector2Rotate(player->direction, 0.2f)), 10, ORANGE);
     }
-    if (this->tick()) {
-        return (1);
+    if (player->threshold)
+    {
+        if (oldX != player->posX ||
+            oldY != player->posY)
+        {
+            if (this->tick()) {
+                return (1);
+            }
+        }
+    } else {
+        if (this->tick()) {
+            return (1);
+        }
     }
+
     aimer.x = (player->direction.x / 3);
     aimer.y = (player->direction.y / 3);
     DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, aimer), 5, GREEN);
