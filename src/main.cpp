@@ -44,6 +44,7 @@ int main(void) {
                 next += game->getNext();
 
                 delete game;
+                CloseAudioDevice();
                 if (next != "0") {
                     game = new Game(next);
                 }
@@ -79,15 +80,16 @@ int main(void) {
         {
             if (auto code = game->getKeys()) {
                 if (code == 1)
-                    gs = ENDING;
+                {gs = ENDING;}
                 else if (code == 2)
-                    gs = NEXT;
+                {gs = NEXT;}
             }
             game->draw();
             break ;
         }
         case (NEXT):
         {
+            ClearBackground(RAYWHITE);
             break ;
         }
         case (ENDING):

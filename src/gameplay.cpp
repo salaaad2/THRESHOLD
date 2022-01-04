@@ -11,6 +11,8 @@
 #include "raymath.h"
 #include <fstream>
 
+#include "weapon.hpp"
+
 Game::Game(std::string const & path)
 {
     std::ifstream ifs(path);
@@ -47,6 +49,9 @@ Game::Game(std::string const & path)
     player->direction.y = 100;
     player->radius = 10;
     player->victims = 0;
+    player->wp = new Weapon(10, 10,
+            "../meta/media/mp3/shotty_shoot.mp3",
+            "../meta/media/mp3/shotty_reload.mp3");
 }
 
 Game::~Game()
@@ -167,6 +172,8 @@ Game::shoot() const
 
         auto add1 = Vector2Add((Vector2){player->posX, player->posY}, rot1);
         auto add2 = Vector2Add((Vector2){player->posX, player->posY}, rot2);
+
+        player->wp->bang();
         for (auto en = enemies->begin(); en != enemies->end(); en++)
         {
             if (CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, add1, (en->radius * 2)) ||
