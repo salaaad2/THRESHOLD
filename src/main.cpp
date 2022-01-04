@@ -40,6 +40,8 @@ int main(void) {
             if (IsKeyPressed(KEY_ENTER))
             {
                 gs = TITLE;
+                delete game;
+                game = new Game;
             }
             break ;
         }

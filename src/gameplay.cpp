@@ -94,10 +94,14 @@ int Game::getKeys() const
         player->direction = Vector2Rotate(player->direction, 0.1f);
     }
     if (IsKeyPressed(KEY_SPACE)) {
-        for (auto & en : *enemies)
+        for (auto en = enemies->begin(); en != enemies->end(); en++)
         {
-            if (CheckCollisionPointLine((Vector2){en.posX, en.posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 20))
-                std::cout << "hit enemy at " << en.posX << "|" << en.posY << std::endl;
+            if (CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 20))
+            {
+              std::cout << "hit enemy at " << en->posX << "|" << en->posY
+                        << std::endl;
+              enemies->erase(en);
+            }
         }
         DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), 20, RED);
 
