@@ -15,14 +15,17 @@
 #include <vector>
 #include <iostream>
 
+
+#define COOLPURPLE CLITERAL(Color){ 170, 153, 255, 255 }    // cool Purple
+//rgb(170,153,255)
 class Game {
-    int nEnemies;
+    int nEnemies; // number of enemies on given level
 
     std::vector<Entity> * enemies;
 
     Entity * player;
 
-    std::string next;
+    std::string next; // next level
 
     public:
         Game(std::string const & path);
@@ -34,7 +37,7 @@ class Game {
         int getKeys() const ;
         int shoot() const ;
 
-        std::string const & getNext() const ;
+        std::string const & getNext() const ; // returns next level's string
 };
 
 #endif // GAMEPLAY_H_

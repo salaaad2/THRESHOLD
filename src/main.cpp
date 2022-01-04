@@ -58,6 +58,7 @@ int main(void) {
                 gs = TITLE;
                 auto next = game->getNext();
                 delete game;
+                CloseAudioDevice();
                 if (next != "0") {
                     game = new Game("../meta/maps/stage_1_start.bfm");
                 }
@@ -67,13 +68,14 @@ int main(void) {
     }
     BeginDrawing();
 
-    ClearBackground(RAYWHITE);
+    ClearBackground(COOLPURPLE);
 
     switch (gs) {
         case (TITLE):
         {
-            DrawText("THRESHOLD", (SCREENWIDTH / 2) - 150, SCREENHEIGHT / 2, 40, RED);
-            DrawText("PRESS ENTER", (SCREENWIDTH / 2) - 150, (SCREENHEIGHT / 2) + 50, 40, MAROON);
+            DrawCircle(SCREENWIDTH / 2, SCREENHEIGHT / 2, 200, BLACK);
+            DrawText("THRESHOLD", (SCREENWIDTH / 2) - 140, SCREENHEIGHT / 2, 40, RED);
+            DrawText("PRESS ENTER", (SCREENWIDTH / 2) - 140, (SCREENHEIGHT / 2) + 50, 40, MAROON);
             break ;
         }
         case (GAMEPLAY):
@@ -89,7 +91,7 @@ int main(void) {
         }
         case (NEXT):
         {
-            ClearBackground(RAYWHITE);
+            ClearBackground(COOLPURPLE);
             break ;
         }
         case (ENDING):

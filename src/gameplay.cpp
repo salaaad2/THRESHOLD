@@ -43,12 +43,13 @@ Game::Game(std::string const & path)
         en->radius = radius;
     }
     player = new Entity;
-    player->posX = SCREENWIDTH / 2;
+    player->posX = 0;
     player->posY = SCREENHEIGHT / 2;
     player->direction.x = 100;
     player->direction.y = 100;
     player->radius = 10;
     player->victims = 0;
+    player->fury = 0;
     player->wp = new Weapon(10, 10,
             "../meta/media/mp3/shotty_shoot.mp3",
             "../meta/media/mp3/shotty_reload.mp3");
@@ -66,22 +67,25 @@ void Game::start() const
     std::cout << "Gameplay: " << nEnemies << "enemies need to be spawned" << std::endl;
 }
 
+// draw bad boys and player
 void Game::draw() const
 {
     auto left = std::to_string(enemies->size());
+    ClearBackground(COOLPURPLE);
     for (auto & en : *enemies)
     {
-        DrawCircleV((Vector2){en.posX, en.posY}, en.radius, RED);
+        DrawCircleV((Vector2){en.posX, en.posY}, en.radius, DARKBLUE);
     }
     DrawCircleV((Vector2){player->posX, player->posY}, 10, GREEN);
     DrawText("Enemies left : ", 10, 10, 20, GREEN);
-    DrawText(left.c_str(), 150, 10, 20,RED);
-    if (player->victims >= 5) {
-        DrawText("[E] FURY", SCREENWIDTH - 150, 10, 50, RED);
+    DrawText(left.c_str(), 150, 10, 20, RED);
+    if (player->fury >= 5) {
+        DrawText("[E] FURY", SCREENWIDTH - 300, 10, 50, RED);
     }
 }
 
 
+// progress the game & check for player death
 int Game::tick() const
 {
     for (auto & en : *enemies)
@@ -105,8 +109,9 @@ int Game::tick() const
 
 int Game::getKeys() const
 {
-    auto oldX = 0, oldY = 0;
-    auto aimer = player->direction;
+    auto oldX = 0, oldY = 0; // get position before processing keys to check for player movement
+                             // in threshold mode
+    auto aimer = player->direction; // duplicate player direction before making changes to it. this becomes the reticle
 
     oldX = player->posX;
     oldY = player->posY;
@@ -126,8 +131,12 @@ int Game::getKeys() const
         player->posX += 4;
         player->posY += 0;
     }
-    if (player->victims >= 5 && IsKeyDown(KEY_E)) {
+    if (player->fury >= 5 &&
+        IsKeyDown(KEY_E)) {
+        player->time = GetTime();
+
         player->threshold = true;
+        player->fury = 0;
     }
     if (IsKeyDown(KEY_LEFT)) {
         player->direction = Vector2Rotate(player->direction, -0.1f); // left
@@ -145,6 +154,11 @@ int Game::getKeys() const
     }
     if (player->threshold)
     {
+        if (GetTime() >= (player->time + 5))
+        {
+            player->fury = 0;
+            player->threshold = false;
+        }
         if (oldX != player->posX ||
             oldY != player->posY)
         {
@@ -173,7 +187,11 @@ Game::shoot() const
         auto add1 = Vector2Add((Vector2){player->posX, player->posY}, rot1);
         auto add2 = Vector2Add((Vector2){player->posX, player->posY}, rot2);
 
-        player->wp->bang();
+        if (player->wp->bang() == 1) {
+            return ;
+        } else {
+            player->wp->bang();
+        }
         for (auto en = enemies->begin(); en != enemies->end(); en++)
         {
             if (CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, add1, (en->radius * 2)) ||
@@ -184,6 +202,7 @@ Game::shoot() const
                         << std::endl;
               enemies->erase(en);
               player->victims++;
+              player->fury++;
               DrawLineEx((Vector2){player->posX, player->posY}, add1, 10,
                          ORANGE);
               DrawLineEx((Vector2){player->posX, player->posY},

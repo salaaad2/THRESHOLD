@@ -18,9 +18,11 @@ class Entity {
         int hp;
         int radius;
         int victims;
+        int fury;
         bool threshold;
         float posX;
         float posY;
+        double time;
         Vector2 direction;
         Weapon * wp;
         Entity();
