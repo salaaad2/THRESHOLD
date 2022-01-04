@@ -22,6 +22,8 @@ class Game {
 
     Entity * player;
 
+    std::string next;
+
     public:
         Game(std::string const & path);
         ~Game();
@@ -30,6 +32,9 @@ class Game {
         void draw() const ;
         int tick() const ;
         int getKeys() const ;
+        int shoot() const ;
+
+        std::string const & getNext() const ;
 };
 
 #endif // GAMEPLAY_H_

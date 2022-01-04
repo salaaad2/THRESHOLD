@@ -35,13 +35,31 @@ int main(void) {
         {
             break ;
         }
+        case (NEXT):
+        {
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                gs = TITLE;
+                std::string next("../meta/maps/");
+                next += game->getNext();
+
+                delete game;
+                if (next != "0") {
+                    game = new Game(next);
+                }
+            }
+            break ;
+        }
         case (ENDING):
         {
             if (IsKeyPressed(KEY_ENTER))
             {
                 gs = TITLE;
+                auto next = game->getNext();
                 delete game;
-                game = new Game("../meta/maps/stage_1_start.bfm");
+                if (next != "0") {
+                    game = new Game("../meta/maps/stage_1_start.bfm");
+                }
             }
             break ;
         }
@@ -59,10 +77,17 @@ int main(void) {
         }
         case (GAMEPLAY):
         {
-            if (game->getKeys()) {
-                gs = ENDING;
+            if (auto code = game->getKeys()) {
+                if (code == 1)
+                    gs = ENDING;
+                else if (code == 2)
+                    gs = NEXT;
             }
             game->draw();
+            break ;
+        }
+        case (NEXT):
+        {
             break ;
         }
         case (ENDING):
