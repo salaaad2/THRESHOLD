@@ -16,7 +16,7 @@ Weapon::Weapon(float const & rg, unsigned int const & dmg, const char *s, const 
     reload = LoadSound(r);
     SetSoundVolume(shot, 0.3f);
     SetSoundVolume(reload, 0.3f);
-    max = barrel = 20;
+    max = barrel = 200;
 }
 
 Weapon::~Weapon() {}
@@ -31,8 +31,10 @@ int Weapon::bang()
     if (barrel == 0)
     {
         refill();
+        return (1);
     } else {
         barrel--;
         PlaySound(shot);
+        return (0);
     }
 }

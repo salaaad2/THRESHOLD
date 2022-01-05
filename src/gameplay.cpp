@@ -22,7 +22,7 @@ Game::Game(std::string const & path)
     std::cout << "Init: reading map file [" << path << "]" << std::endl;
     while (ifs >> tok)
     {
-        if (tok == "E")
+        if (tok == "ENEMIES")
         {
             ifs >> tok;
             std::cout << "will spawn " << tok << " enemies";
@@ -30,7 +30,7 @@ Game::Game(std::string const & path)
             ifs >> tok;
             radius = std::atoi(tok.c_str());
         }
-        if (tok == "N")
+        if (tok == "NEXT")
         {
             ifs >> tok;
             next = tok;
@@ -86,6 +86,7 @@ void Game::draw() const
 
 
 // progress the game & check for player death
+// NEW: go towards player NEXT: spawn at different times
 int Game::tick() const
 {
     for (auto & en : *enemies)
@@ -96,11 +97,22 @@ int Game::tick() const
         if (en.posY >= SCREENHEIGHT || en.posY <= 0) {
           en.direction.y = -en.direction.y;
         }
+        if (en.posX >= player->posX) {
+            en.direction.x -= 0.1f;
+        }
+        if (en.posY >= player->posY) {
+            en.direction.y -= 0.1f;
+        }
+        if (en.posX <= player->posX) {
+            en.direction.x += 0.1f;
+        }
+        if (en.posY <= player->posY) {
+            en.direction.y += 0.1f;
+        }
         en.posX += en.direction.x;
         en.posY += en.direction.y;
         if (CheckCollisionCircles((Vector2){player->posX, player->posY}, 10,
-                                  (Vector2){en.posX, en.posY}, 10)) {
-            std::cout << "you died" << std::endl;
+                                  (Vector2){en.posX, en.posY}, 10)) { // check for player death (one shot one kill)
             return (1);
         }
     }
@@ -188,7 +200,7 @@ Game::shoot() const
         auto add2 = Vector2Add((Vector2){player->posX, player->posY}, rot2);
 
         if (player->wp->bang() == 1) {
-            return ;
+            return (0);
         } else {
             player->wp->bang();
         }
