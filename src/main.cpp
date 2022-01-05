@@ -45,7 +45,7 @@ int main(void) {
 
                 delete game;
                 CloseAudioDevice();
-                if (next != "0") {
+                if (game->getNext() != "0") {
                     game = new Game(next);
                 }
             }

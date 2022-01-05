@@ -89,31 +89,41 @@ void Game::draw() const
 // NEW: go towards player NEXT: spawn at different times
 int Game::tick() const
 {
-    for (auto & en : *enemies)
+    for (auto  en = enemies->begin(); en != enemies->end(); en++)
     {
-        if (en.posX >= SCREENWIDTH || en.posX <= 0) {
-          en.direction.x = -en.direction.x;
+        if (en->hp != 0)
+      {
+        if (en->posX >= SCREENWIDTH || en->posX <= 0) {
+          en->direction.x = -en->direction.x;
         }
-        if (en.posY >= SCREENHEIGHT || en.posY <= 0) {
-          en.direction.y = -en.direction.y;
+        if (en->posY >= SCREENHEIGHT || en->posY <= 0) {
+          en->direction.y = -en->direction.y;
         }
-        if (en.posX >= player->posX) {
-            en.direction.x -= 0.1f;
+        if (en->posX >= player->posX) {
+          en->direction.x -= 0.1f;
         }
-        if (en.posY >= player->posY) {
-            en.direction.y -= 0.1f;
+        if (en->posY >= player->posY) {
+          en->direction.y -= 0.1f;
         }
-        if (en.posX <= player->posX) {
-            en.direction.x += 0.1f;
+        if (en->posX <= player->posX) {
+          en->direction.x += 0.1f;
         }
-        if (en.posY <= player->posY) {
-            en.direction.y += 0.1f;
+        if (en->posY <= player->posY) {
+          en->direction.y += 0.1f;
         }
-        en.posX += en.direction.x;
-        en.posY += en.direction.y;
-        if (CheckCollisionCircles((Vector2){player->posX, player->posY}, 10,
-                                  (Vector2){en.posX, en.posY}, 10)) { // check for player death (one shot one kill)
-            return (1);
+      } else {
+            if (en->posX >= SCREENWIDTH || en->posX <= 0 || en->posY >= SCREENHEIGHT ) {
+              enemies->erase(en);
+              return (0);
+            }
+        }
+
+      en->posX += en->direction.x;
+      en->posY += en->direction.y;
+      if (en->hp != 0 && // check for player death (one shot one kill)
+          CheckCollisionCircles((Vector2){player->posX, player->posY}, 10,
+                                (Vector2){en->posX, en->posY}, 10)) {
+        return (1);
         }
     }
     return (0);
@@ -163,6 +173,7 @@ int Game::getKeys() const
         if (player->victims == nEnemies) {
             return (2);
         }
+        std::cout << player->victims << "|" << nEnemies << std::endl;
     }
     if (player->threshold)
     {
@@ -207,12 +218,15 @@ Game::shoot() const
         for (auto en = enemies->begin(); en != enemies->end(); en++)
         {
             if (CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, add1, (en->radius * 2)) ||
-                CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, Vector2Rotate(player->direction, 0.0f)), (en->radius * 2)) ||
+                CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), (en->radius * 2)) ||
                 CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, add2, (en->radius * 2)))
             {
               std::cout << "hit enemy at " << en->posX << "|" << en->posY
                         << std::endl;
-              enemies->erase(en);
+              en->hp = 0;
+              en->direction.x = (player->direction.x / 2);
+              en->direction.y = (player->direction.y / 2);
+              // enemies->erase(en);
               player->victims++;
               player->fury++;
               DrawLineEx((Vector2){player->posX, player->posY}, add1, 10,
