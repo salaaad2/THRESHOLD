@@ -10,6 +10,7 @@ add_executable(${PROJECT_NAME}
     src/window.cpp
     src/gameplay.cpp
     src/weapon.cpp
+    src/terrain.cpp
     src/entity.cpp)
 
 target_link_libraries(${PROJECT_NAME} raylib m pthread dl)

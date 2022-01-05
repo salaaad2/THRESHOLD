@@ -9,6 +9,7 @@
 #ifndef GAMEPLAY_H_
 #define GAMEPLAY_H_
 
+#include "terrain.hpp"
 #include "window.hpp"
 #include "entity.hpp"
 
@@ -22,6 +23,8 @@ class Game {
     int nEnemies; // number of enemies on given level
 
     std::vector<Entity> * enemies;
+
+    std::vector<Terrain*> * terrain;
 
     Entity * player;
 

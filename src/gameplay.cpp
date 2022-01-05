@@ -59,6 +59,7 @@ Game::~Game()
 {
     delete enemies;
     delete player;
+    delete terrain;
 }
 
 void Game::start()
@@ -78,7 +79,9 @@ void Game::start()
 void Game::draw() const
 {
     auto left = std::to_string(enemies->size());
+
     ClearBackground(COOLPURPLE);
+
     for (auto & en : *enemies)
     {
         DrawCircleV((Vector2){en.posX, en.posY}, en.radius, DARKBLUE);
@@ -87,9 +90,7 @@ void Game::draw() const
     Rectangle destRec = { player->posX, player->posY, frameWidth * 1.4f, frameHeight * 1.4f };
 
     // Origin of the texture (rotation/scale point), it's relative to destination rectangle size
-
     DrawTexturePro(player->tex, sourceRec, destRec, origin, Vector2Angle((Vector2){0.0f, 0.0f}, player->direction), WHITE);
-
 
     DrawText("Enemies left : ", 10, 10, 20, GREEN);
     DrawText(left.c_str(), 150, 10, 20, RED);
@@ -234,13 +235,10 @@ Game::shoot() const
             if (CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, add1, (en->radius * 2)) ||
                 CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), (en->radius * 2)) ||
                 CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, add2, (en->radius * 2)))
-            {
-              std::cout << "hit enemy at " << en->posX << "|" << en->posY
-                        << std::endl;
+            { // enemy hit
               en->hp = 0;
               en->direction.x = (player->direction.x / 2);
               en->direction.y = (player->direction.y / 2);
-              // enemies->erase(en);
               player->victims++;
               player->fury++;
               DrawLineEx((Vector2){player->posX, player->posY}, add1, 10,
@@ -254,6 +252,7 @@ Game::shoot() const
               return (1);
             }
         }
+        // shotty cone
         DrawLineEx((Vector2){player->posX, player->posY}, add1, 10, ORANGE);
         DrawLineEx((Vector2){player->posX, player->posY},
                    Vector2Add((Vector2){player->posX, player->posY},
