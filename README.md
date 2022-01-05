@@ -32,3 +32,14 @@ cmake ..
 
 - Optimizations on vectors (too many function calls)
 
+
+## TODO
+
+### Weapons
+- reload
+- visual representation of mag
+- more weapons (gravity gun ?)
+
+### Maps
+- more
+- terrain

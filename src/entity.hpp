@@ -22,7 +22,8 @@ class Entity {
         bool threshold;
         float posX;
         float posY;
-        double time;
+        double furyTime;
+        double reloadTime;
         Vector2 direction;
         Weapon * wp;
         Image img;

@@ -59,7 +59,6 @@ Game::~Game()
 {
     delete enemies;
     delete player;
-    delete terrain;
 }
 
 void Game::start()
@@ -87,7 +86,7 @@ void Game::draw() const
         DrawCircleV((Vector2){en.posX, en.posY}, en.radius, DARKBLUE);
     }
     // Destination rectangle (screen rectangle where drawing part of texture)
-    Rectangle destRec = { player->posX, player->posY, frameWidth * 1.4f, frameHeight * 1.4f };
+    Rectangle destRec = { player->posX, player->posY, frameWidth * 1.8f, frameHeight * 1.8f };
 
     // Origin of the texture (rotation/scale point), it's relative to destination rectangle size
     DrawTexturePro(player->tex, sourceRec, destRec, origin, Vector2Angle((Vector2){0.0f, 0.0f}, player->direction), WHITE);
@@ -101,7 +100,7 @@ void Game::draw() const
 
 
 // progress the game & check for player death
-// NEW: go towards player NEXT: spawn at different times
+// NEW: go towards player NEXT: spawn at different furyTimes
 int Game::tick() const
 {
     for (auto  en = enemies->begin(); en != enemies->end(); en++)
@@ -170,7 +169,7 @@ int Game::getKeys() const
     }
     if (player->fury >= 5 &&
         IsKeyDown(KEY_E)) {
-        player->time = GetTime();
+        player->furyTime = GetTime();
 
         player->threshold = true;
         player->fury = 0;
@@ -192,7 +191,7 @@ int Game::getKeys() const
     }
     if (player->threshold)
     {
-        if (GetTime() >= (player->time + 5))
+        if (GetTime() >= (player->furyTime + 5))
         {
             player->fury = 0;
             player->threshold = false;
@@ -207,6 +206,13 @@ int Game::getKeys() const
     } else {
         if (this->tick()) {
             return (1);
+        }
+    }
+    if (player->wp->empty) {
+        if (GetTime() >= (player->reloadTime + 2))
+        {
+            player->wp->refill();
+            player->wp->empty = false;
         }
     }
     aimer.x = (player->direction.x / 3);
@@ -225,10 +231,13 @@ Game::shoot() const
         auto add1 = Vector2Add((Vector2){player->posX, player->posY}, rot1);
         auto add2 = Vector2Add((Vector2){player->posX, player->posY}, rot2);
 
-        if (player->wp->bang() == 1) {
+        if (player->wp->empty == true) {
             return (0);
-        } else {
-            player->wp->bang();
+        }
+        if (player->wp->bang() == 1) {
+            player->wp->empty = true;
+            player->reloadTime = GetTime();
+            return (0);
         }
         for (auto en = enemies->begin(); en != enemies->end(); en++)
         {

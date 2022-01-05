@@ -18,6 +18,7 @@ class Weapon {
   unsigned int barrel;
   unsigned int max;
 
+
   float const &range;
   unsigned int const &damage;
 
@@ -27,6 +28,8 @@ public:
 
   int bang();
   void refill();
+
+  bool empty;
 };
 
 #endif // WEAPON_H_
