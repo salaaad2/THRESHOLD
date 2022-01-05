@@ -48,6 +48,7 @@ class Game {
     int tick() const;
     int getKeys() const;
     int shoot() const;
+    int hit(Entity en, Vector2 add1, Vector2 add2) const ;
 
     std::string const &getNext() const; // returns next level's string
 };

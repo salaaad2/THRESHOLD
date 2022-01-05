@@ -96,6 +96,9 @@ void Game::draw() const
     if (player->fury >= 5) {
         DrawText("[E] FURY", SCREENWIDTH - 300, 10, 50, RED);
     }
+    for (auto i = 0; i < player->wp->barrel; i++) {
+        DrawRectangle(40 + (i * 20), SCREENHEIGHT - 60, 10, 30, RED);
+    }
 }
 
 
@@ -136,7 +139,7 @@ int Game::tick() const
       en->posY += en->direction.y;
       if (en->hp != 0 && // check for player death (one shot one kill)
           CheckCollisionCircles((Vector2){player->posX, player->posY}, 10,
-                                (Vector2){en->posX, en->posY}, 10)) {
+                                (Vector2){en->posX, en->posY}, 40)) {
         return (1);
         }
     }
@@ -147,24 +150,22 @@ int Game::getKeys() const
 {
     auto oldX = 0, oldY = 0; // get position before processing keys to check for player movement
                              // in threshold mode
-    auto aimer = player->direction; // duplicate player direction before making changes to it. this becomes the reticle
-
     oldX = player->posX;
     oldY = player->posY;
     if (IsKeyDown(KEY_W)) {
         player->posX += 0;
-        player->posY += -4;
+        player->posY += -7;
     }
     if (IsKeyDown(KEY_S)) {
         player->posX += 0;
-        player->posY += 4;
+        player->posY += 7;
     }
     if (IsKeyDown(KEY_A)) {
-        player->posX += -4;
+        player->posX += -7;
         player->posY += 0;
     }
     if (IsKeyDown(KEY_D)) {
-        player->posX += 4;
+        player->posX += 7;
         player->posY += 0;
     }
     if (player->fury >= 5 &&
@@ -187,7 +188,6 @@ int Game::getKeys() const
         if (player->victims == nEnemies) {
             return (2);
         }
-        std::cout << player->victims << "|" << nEnemies << std::endl;
     }
     if (player->threshold)
     {
@@ -215,9 +215,6 @@ int Game::getKeys() const
             player->wp->empty = false;
         }
     }
-    aimer.x = (player->direction.x / 3);
-    aimer.y = (player->direction.y / 3);
-    DrawLineEx((Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, aimer), 5, GREEN);
     return (0);
 }
 
@@ -231,6 +228,9 @@ Game::shoot() const
         auto add1 = Vector2Add((Vector2){player->posX, player->posY}, rot1);
         auto add2 = Vector2Add((Vector2){player->posX, player->posY}, rot2);
 
+        auto r = player->direction;
+        r.x *= 2;
+        r.y *= 2;
         if (player->wp->empty == true) {
             return (0);
         }
@@ -242,7 +242,7 @@ Game::shoot() const
         for (auto en = enemies->begin(); en != enemies->end(); en++)
         {
             if (CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, add1, (en->radius * 2)) ||
-                CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, player->direction), (en->radius * 2)) ||
+                CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, r), (en->radius * 2)) ||
                 CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, add2, (en->radius * 2)))
             { // enemy hit
               en->hp = 0;
@@ -254,7 +254,7 @@ Game::shoot() const
                          ORANGE);
               DrawLineEx((Vector2){player->posX, player->posY},
                          Vector2Add((Vector2){player->posX, player->posY},
-                                    player->direction),
+                                    r),
                          10, ORANGE);
               DrawLineEx((Vector2){player->posX, player->posY}, add2, 10,
                          ORANGE);
@@ -265,7 +265,7 @@ Game::shoot() const
         DrawLineEx((Vector2){player->posX, player->posY}, add1, 10, ORANGE);
         DrawLineEx((Vector2){player->posX, player->posY},
                    Vector2Add((Vector2){player->posX, player->posY},
-                              player->direction),
+                              r),
                    10, ORANGE);
         DrawLineEx((Vector2){player->posX, player->posY}, add2, 10, ORANGE);
         return (0);

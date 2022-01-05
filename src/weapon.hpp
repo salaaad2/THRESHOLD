@@ -15,7 +15,6 @@ class Weapon {
   Sound shot;
   Sound reload;
 
-  unsigned int barrel;
   unsigned int max;
 
 
@@ -30,6 +29,7 @@ public:
   void refill();
 
   bool empty;
+  unsigned int barrel;
 };
 
 #endif // WEAPON_H_
