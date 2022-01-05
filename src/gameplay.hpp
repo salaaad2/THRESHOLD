@@ -29,17 +29,24 @@ class Game {
 
     Camera2D * camera;
 
-    public:
-        Game(std::string const & path);
-        ~Game();
+    int frameWidth;
+    int frameHeight;
 
-        void start() const ;
-        void draw() const ;
-        int tick() const ;
-        int getKeys() const ;
-        int shoot() const ;
+    Rectangle sourceRec;
 
-        std::string const & getNext() const ; // returns next level's string
+    Vector2 origin;
+
+  public:
+    Game(std::string const &path);
+    ~Game();
+
+    void start() ;
+    void draw() const;
+    int tick() const;
+    int getKeys() const;
+    int shoot() const;
+
+    std::string const &getNext() const; // returns next level's string
 };
 
 #endif // GAMEPLAY_H_

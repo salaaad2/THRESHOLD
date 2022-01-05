@@ -61,11 +61,17 @@ Game::~Game()
     delete player;
 }
 
-void Game::start() const
+void Game::start()
 {
     player->tex = LoadTexture("../meta/media/sprites/cowboy_idle.png");
     std::cout << "----- Gameplay: Start -----" << std::endl;
     std::cout << "Gameplay: " << nEnemies << "enemies need to be spawned" << std::endl;
+    frameWidth = player->tex.width;
+    frameHeight = player->tex.height;
+
+    sourceRec = { 0.0f, 0.0f, (float)frameWidth, (float)frameHeight };
+
+    origin = { (float)frameWidth, (float)frameHeight };
 }
 
 // draw bad boys and player
@@ -77,23 +83,10 @@ void Game::draw() const
     {
         DrawCircleV((Vector2){en.posX, en.posY}, en.radius, DARKBLUE);
     }
-    // DrawCircleV((Vector2){player->posX, player->posY}, 10, GREEN);
-    // DrawTexture(player->tex, , WHITE);                               // Draw a Texture2D
-    // DrawTextureEx(player->tex,
-    //               (Vector2){player->posX, player->posY},
-    //               Vector2Angle((Vector2){0.0f, 0.0f}, player->direction),
-    //               1.0f,
-    //               WHITE);  // Draw a Texture2D with extended parameters
-    int frameWidth = player->tex.width;
-    int frameHeight = player->tex.height;
-
-    Rectangle sourceRec = { 0.0f, 0.0f, (float)frameWidth, (float)frameHeight };
-
     // Destination rectangle (screen rectangle where drawing part of texture)
     Rectangle destRec = { player->posX, player->posY, frameWidth * 1.4f, frameHeight * 1.4f };
 
     // Origin of the texture (rotation/scale point), it's relative to destination rectangle size
-    Vector2 origin = { (float)frameWidth, (float)frameHeight };
 
     DrawTexturePro(player->tex, sourceRec, destRec, origin, Vector2Angle((Vector2){0.0f, 0.0f}, player->direction), WHITE);
 
