@@ -103,6 +103,7 @@ int main(void) {
     }
     EndDrawing();
   }
+    EndMode2D();
   CloseWindow();
   return 0;
 }

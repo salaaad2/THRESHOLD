@@ -8,6 +8,18 @@ Most of the prototype features are done, but it is currenty very barebones.
 
 Feel free to fork & add features.
 
+## Build
+
+- make sure you have rayib installed, then run :
+
+``` sh
+mkdir build 
+cd build
+cmake ..
+./space
+```
+
+
 ## Work In progress 
 
 - Visual improvements

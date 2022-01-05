@@ -27,6 +27,8 @@ class Game {
 
     std::string next; // next level
 
+    Camera2D * camera;
+
     public:
         Game(std::string const & path);
         ~Game();

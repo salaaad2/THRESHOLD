@@ -25,6 +25,9 @@ class Entity {
         double time;
         Vector2 direction;
         Weapon * wp;
+        Image img;
+        Texture2D tex;
+
         Entity();
         ~Entity();
 };
