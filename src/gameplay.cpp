@@ -10,6 +10,7 @@
 
 #include "raymath.h"
 #include <fstream>
+#include <iostream>
 #include <raylib.h>
 
 #include "weapon.hpp"
@@ -213,6 +214,7 @@ int Game::getKeys() const
         player->direction = Vector2Rotate(player->direction, 0.1f);
     }
     if (IsKeyPressed(KEY_SPACE)) {
+        std::cout << "key space";
         if (shoot()) {
             return (0);
         }
@@ -235,6 +237,7 @@ int Game::getKeys() const
             }
         }
     } else {
+        std::cout << "tick now" << std::endl;
         if (this->tick()) {
             return (1);
         }
@@ -257,7 +260,7 @@ Game::shoot() const
         if (player->wp->empty == true) {
             return (0);
         }
-        player->wp->bang(enemies, player->direction, (Vector2){player->posX, player->posY});
+        player->wp->bang(enemies, player->direction, (Vector2){player->posX, player->posY}, &player->victims);
         if (player->wp->empty == true) {
             player->reloadTime = GetTime();
         }

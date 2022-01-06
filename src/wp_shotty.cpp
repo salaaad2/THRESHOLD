@@ -12,7 +12,7 @@ wp_shotty::wp_shotty(float const &rg, unsigned int const &dmg, unsigned int cons
 
 
 
-int wp_shotty::bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vector2 playerPosition)
+int wp_shotty::bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vector2 playerPosition, int * victims)
 {
     if (barrel == 0)
     {
@@ -33,14 +33,8 @@ int wp_shotty::bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vect
         r.x *= 2;
         r.y *= 2;
 
-        std::cout << "before loop";
-        if (enemies == NULL)
-        {
-            return (0);
-        }
         for (auto en = enemies->begin(); en != enemies->end(); en++)
         {
-            std::cout << "loop";
             if (CheckCollisionPointLine((Vector2){en->posX, en->posY}, playerPosition, add1, (en->radius * 2)) ||
                 CheckCollisionPointLine((Vector2){en->posX, en->posY}, playerPosition, Vector2Add(playerPosition, r), (en->radius * 2)) ||
                 CheckCollisionPointLine((Vector2){en->posX, en->posY}, playerPosition, add2, (en->radius * 2)))
@@ -50,8 +44,8 @@ int wp_shotty::bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vect
                 {
                     en->direction.x = (playerDirection.x / 2);
                     en->direction.y = (playerDirection.y / 2);
-                    // player->victims++;
                 }
+                *victims += 1;
             }
         }
         // shotty cone
@@ -67,7 +61,6 @@ int wp_shotty::bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vect
         if (barrel == 0)
         {
             empty = true;
-            return (1);
         }
         return (0);
     }
