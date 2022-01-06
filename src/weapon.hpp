@@ -11,6 +11,10 @@
 
 #include "raylib.h"
 
+#include <vector>
+
+class Entity;
+
 class AWeapon {
 protected:
   Sound shot;
@@ -26,7 +30,7 @@ public:
   AWeapon(float const &rg, unsigned int const &dmg, unsigned int const & mag, const char *s, const char *r);
   ~AWeapon();
 
-  virtual int bang() = 0;
+  virtual int bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vector2 playerPosition) = 0;
   void refill();
 
   bool empty;

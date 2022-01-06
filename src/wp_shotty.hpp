@@ -16,7 +16,7 @@ class wp_shotty : public AWeapon {
         wp_shotty(float const &rg, unsigned int const &dmg, unsigned int const & mag, const char *s, const char *r);
         ~wp_shotty();
 
-        int bang() ;
+        int bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vector2 playerPosition) ;
 };
 
 

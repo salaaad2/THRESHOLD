@@ -253,55 +253,14 @@ int Game::getKeys() const
 int
 Game::shoot() const
 {
-        auto rot1 = Vector2Rotate(player->direction, -0.2f);
-        auto rot2 = Vector2Rotate(player->direction, 0.2f);
 
-        auto add1 = Vector2Add((Vector2){player->posX, player->posY}, rot1);
-        auto add2 = Vector2Add((Vector2){player->posX, player->posY}, rot2);
-
-        auto r = player->direction;
-        r.x *= 2;
-        r.y *= 2;
         if (player->wp->empty == true) {
             return (0);
         }
-        if (player->wp->bang() == 1) {
-            player->wp->empty = true;
+        player->wp->bang(enemies, player->direction, (Vector2){player->posX, player->posY});
+        if (player->wp->empty == true) {
             player->reloadTime = GetTime();
-            return (0);
         }
-        for (auto en = enemies->begin(); en != enemies->end(); en++)
-        {
-            if (CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, add1, (en->radius * 2)) ||
-                CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, r), (en->radius * 2)) ||
-                CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, add2, (en->radius * 2)))
-            { // enemy hit
-                en->hp--;
-                if (en->hp == 0)
-                {
-                    en->direction.x = (player->direction.x / 2);
-                    en->direction.y = (player->direction.y / 2);
-                    player->victims++;
-                }
-                player->fury++;
-                DrawLineEx((Vector2){player->posX, player->posY}, add1, 10,
-                            ORANGE);
-                DrawLineEx((Vector2){player->posX, player->posY},
-                            Vector2Add((Vector2){player->posX, player->posY},
-                                        r),
-                            10, ORANGE);
-                DrawLineEx((Vector2){player->posX, player->posY}, add2, 10,
-                            ORANGE);
-                return (1);
-            }
-        }
-        // shotty cone
-        DrawLineEx((Vector2){player->posX, player->posY}, add1, 10, ORANGE);
-        DrawLineEx((Vector2){player->posX, player->posY},
-                   Vector2Add((Vector2){player->posX, player->posY},
-                              r),
-                   10, ORANGE);
-        DrawLineEx((Vector2){player->posX, player->posY}, add2, 10, ORANGE);
         return (0);
 }
 

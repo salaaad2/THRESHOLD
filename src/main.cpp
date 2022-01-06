@@ -19,7 +19,7 @@ int main(void) {
 
   // Main game loop
   InitWindow(SCREENWIDTH, SCREENHEIGHT, "WIP -- coolspace");
-  Game* game = new Game("../meta/maps/stage_1_boss.bfm");
+  Game* game = new Game("../meta/maps/stage_1_start.bfm");
   while (!WindowShouldClose()) /* Detect window close button or ESC key */
   {
     switch (gs) {
@@ -80,9 +80,9 @@ int main(void) {
         case (GAMEPLAY):
         {
             if (auto code = game->getKeys()) {
-                if (code == 1)
+                if (code == 1) // death
                 {gs = ENDING;}
-                else if (code == 2)
+                else if (code == 2) // level end
                 {gs = NEXT;}
             }
             game->draw();
