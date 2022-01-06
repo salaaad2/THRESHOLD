@@ -1,2 +1,3 @@
+BOSS 1 5
 ENEMIES 2 100
-NEXT 0
+NEXT stage_1_boss.bfm

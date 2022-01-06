@@ -22,7 +22,7 @@ class Weapon {
   unsigned int const &damage;
 
 public:
-  Weapon(float const &rg, unsigned int const &dmg, const char *s, const char *r);
+  Weapon(float const &rg, unsigned int const &dmg, unsigned int const & mag, const char *s, const char *r);
   ~Weapon();
 
   int bang();

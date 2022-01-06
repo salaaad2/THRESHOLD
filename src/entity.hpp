@@ -27,9 +27,11 @@ class Entity {
         Vector2 direction;
         Weapon * wp;
         Image img;
-        Texture2D tex;
+        Texture2D idleTex;
+        Texture2D hurtTex;
 
         Entity();
+        Entity(int const & h);
         ~Entity();
 };
 

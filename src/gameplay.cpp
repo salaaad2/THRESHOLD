@@ -10,14 +10,16 @@
 
 #include "raymath.h"
 #include <fstream>
+#include <raylib.h>
 
 #include "weapon.hpp"
 
-Game::Game(std::string const & path)
+Game::Game(std::string const & path) : current(path)
 {
     std::ifstream ifs(path);
     std::string tok;
-    auto radius = 10;
+    auto radius = 0;
+    auto ehp = 0;
 
     std::cout << "Init: reading map file [" << path << "]" << std::endl;
     while (ifs >> tok)
@@ -36,23 +38,45 @@ Game::Game(std::string const & path)
             next = tok;
             std::cout << "next level is " << next;
         }
+        if (tok == "BOSS")
+        {
+            ifs >> tok;
+            ehp = (tok == "0") ? 1 : 0;
+            if (ehp == 0) {
+                ifs >> tok;
+                ehp = std::atoi(tok.c_str());
+            }
+        }
     }
     ifs.close();
-    enemies = new std::vector<Entity>(nEnemies);
-    for (auto en = enemies->begin(); en != enemies->end(); en++) {
-        en->radius = radius;
+    enemies = new std::vector<Entity>;
+    for (auto i = 0; i < nEnemies; i++) {
+        if (ehp == 0) {
+            Entity en(ehp);
+        en.radius = radius;
+            en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
+            en.hurtTex = LoadTexture(SBIRE_TEX_HURT);
+            enemies->push_back(en);
+        } else {
+            Entity en(ehp);
+        en.radius = radius;
+            en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
+            en.hurtTex = LoadTexture(SBIRE_TEX_HURT);
+            enemies->push_back(en);
+        }
     }
     player = new Entity;
     player->posX = 0;
     player->posY = SCREENHEIGHT / 2.0f;
     player->direction.x = 100;
-    player->direction.y = 100;
+    player->direction.y = 0;
     player->radius = 10;
     player->victims = 0;
     player->fury = 0;
-    player->wp = new Weapon(10, 10,
-            "../meta/media/mp3/shotty_shoot.mp3",
-            "../meta/media/mp3/shotty_reload.mp3");
+    player->wp = new Weapon(10, 10, 10,
+            SHOTTY_BANG,
+            SHOTTY_RELOAD);
+    player->idleTex = LoadTexture(MUCHACHO_TEX);
 }
 
 Game::~Game()
@@ -63,11 +87,10 @@ Game::~Game()
 
 void Game::start()
 {
-    player->tex = LoadTexture("../meta/media/sprites/cowboy_idle.png");
     std::cout << "----- Gameplay: Start -----" << std::endl;
     std::cout << "Gameplay: " << nEnemies << "enemies need to be spawned" << std::endl;
-    frameWidth = player->tex.width;
-    frameHeight = player->tex.height;
+    frameWidth = player->idleTex.width;
+    frameHeight = player->idleTex.height;
 
     sourceRec = { 0.0f, 0.0f, (float)frameWidth, (float)frameHeight };
 
@@ -79,17 +102,20 @@ void Game::draw() const
 {
     auto left = std::to_string(enemies->size());
 
-    ClearBackground(COOLPURPLE);
-
+    auto texSize = (enemies->at(0).radius / 40.0f);
     for (auto & en : *enemies)
     {
-        DrawCircleV((Vector2){en.posX, en.posY}, en.radius, DARKBLUE);
+        if (en.hp == 0)
+            DrawTextureEx(en.hurtTex, (Vector2){en.posX - 20, en.posY - 20}, 1.0f, 0.6f, WHITE);
+        else {
+            DrawTextureEx(en.idleTex, (Vector2){en.posX - 20, en.posY - 20}, 1.0f, 0.6f, WHITE);
+        }
     }
     // Destination rectangle (screen rectangle where drawing part of texture)
     Rectangle destRec = { player->posX, player->posY, frameWidth * 1.8f, frameHeight * 1.8f };
 
     // Origin of the texture (rotation/scale point), it's relative to destination rectangle size
-    DrawTexturePro(player->tex, sourceRec, destRec, origin, Vector2Angle((Vector2){0.0f, 0.0f}, player->direction), WHITE);
+    DrawTexturePro(player->idleTex, sourceRec, destRec, origin, Vector2Angle((Vector2){0.0f, 0.0f}, player->direction), WHITE);
 
     DrawText("Enemies left : ", 10, 10, 20, GREEN);
     DrawText(left.c_str(), 150, 10, 20, RED);
@@ -108,7 +134,7 @@ int Game::tick() const
 {
     for (auto  en = enemies->begin(); en != enemies->end(); en++)
     {
-        if (en->hp != 0)
+        if (en->hp > 0)
         {
             if (en->posX >= SCREENWIDTH || en->posX <= 0) {
                 en->direction.x = -en->direction.x;
@@ -144,7 +170,7 @@ int Game::tick() const
       if (en->hp != 0 && // check for player death (one shot one kill)
           CheckCollisionCircles((Vector2){player->posX, player->posY}, 10,
                                 (Vector2){en->posX, en->posY}, 40)) {
-        return (1);
+            return (1);
         }
     }
     return (0);
@@ -249,20 +275,23 @@ Game::shoot() const
                 CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, Vector2Add((Vector2){player->posX, player->posY}, r), (en->radius * 2)) ||
                 CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, add2, (en->radius * 2)))
             { // enemy hit
-              en->hp = 0;
-              en->direction.x = player->direction.x;
-              en->direction.y = player->direction.y;
-              player->victims++;
-              player->fury++;
-              DrawLineEx((Vector2){player->posX, player->posY}, add1, 10,
-                         ORANGE);
-              DrawLineEx((Vector2){player->posX, player->posY},
-                         Vector2Add((Vector2){player->posX, player->posY},
-                                    r),
-                         10, ORANGE);
-              DrawLineEx((Vector2){player->posX, player->posY}, add2, 10,
-                         ORANGE);
-              return (1);
+                en->hp--;
+                if (en->hp == 0)
+                {
+                    en->direction.x = (player->direction.x / 2);
+                    en->direction.y = (player->direction.y / 2);
+                    player->victims++;
+                }
+                player->fury++;
+                DrawLineEx((Vector2){player->posX, player->posY}, add1, 10,
+                            ORANGE);
+                DrawLineEx((Vector2){player->posX, player->posY},
+                            Vector2Add((Vector2){player->posX, player->posY},
+                                        r),
+                            10, ORANGE);
+                DrawLineEx((Vector2){player->posX, player->posY}, add2, 10,
+                            ORANGE);
+                return (1);
             }
         }
         // shotty cone
@@ -278,3 +307,7 @@ Game::shoot() const
 std::string const &
 Game::getNext() const
 {return next;}
+
+std::string const &
+Game::getCurrent() const
+{return current;}

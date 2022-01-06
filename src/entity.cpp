@@ -8,7 +8,10 @@
 
 #include "entity.hpp"
 
-Entity::Entity(void) : hp(1)
+Entity::Entity()
+: Entity(1) {}
+
+Entity::Entity(int const & h) : hp(h)
 {
     auto dir = GetRandomValue(0, 3);
 
@@ -40,8 +43,7 @@ Entity::Entity(void) : hp(1)
         }
     }
 
-    direction = (Vector2){0.02f, 0.02f};
-    radius = 10; // default radius. this is changed later
+    direction = (Vector2){0.02f, 0.0f};
     threshold = false;
 }
 

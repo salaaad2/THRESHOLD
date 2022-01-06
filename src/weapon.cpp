@@ -10,15 +10,15 @@
 
 #include <iostream>
 
-Weapon::Weapon(float const & rg, unsigned int const & dmg, const char *s, const char *r) :
-    range(rg), damage(dmg)
+Weapon::Weapon(float const & rg, unsigned int const & dmg, unsigned int const & mag, const char *s, const char *r) :
+    range(rg), damage(dmg), max(mag)
 {
     InitAudioDevice();
     shot = LoadSound(s);
     reload = LoadSound(r);
     SetSoundVolume(shot, 0.3f);
     SetSoundVolume(reload, 0.3f);
-    max = barrel = 10;
+    barrel = max;
 }
 
 Weapon::~Weapon() {}

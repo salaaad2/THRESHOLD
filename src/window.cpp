@@ -11,7 +11,6 @@
 int
 initWindow(void) {
     // Initialization
-    InitWindow(SCREENWIDTH, SCREENHEIGHT, "WIP -- coolspace");
     SetTargetFPS(60);
 
     return (0);

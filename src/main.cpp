@@ -13,12 +13,13 @@
 
 gameState gs = TITLE;
 
-Game* game = new Game("../meta/maps/stage_1_start.bfm");
 
 int main(void) {
   initWindow();
 
   // Main game loop
+  InitWindow(SCREENWIDTH, SCREENHEIGHT, "WIP -- coolspace");
+  Game* game = new Game("../meta/maps/stage_1_boss.bfm");
   while (!WindowShouldClose()) /* Detect window close button or ESC key */
   {
     switch (gs) {
@@ -56,12 +57,10 @@ int main(void) {
             if (IsKeyPressed(KEY_ENTER))
             {
                 gs = TITLE;
-                auto next = game->getNext();
+                auto current = game->getCurrent();
                 delete game;
                 CloseAudioDevice();
-                if (next != "0") {
-                    game = new Game("../meta/maps/stage_1_start.bfm");
-                }
+                game = new Game(current);
             }
             break ;
         }
