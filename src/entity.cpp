@@ -17,34 +17,30 @@ Entity::Entity(void) : hp(1)
         case (0):
         {
             posX = GetRandomValue((SCREENWIDTH / 2) - 30, (SCREENWIDTH / 2) + 30);
-            posY = 0;
+            posY = GetRandomValue(0, 40);
             break;
         }
         case (1):
         {
-            posX = SCREENWIDTH;
+            posX = GetRandomValue(SCREENWIDTH - 20, SCREENWIDTH + 20);
             posY = GetRandomValue((SCREENHEIGHT / 2) - 30, (SCREENHEIGHT / 2) + 30);
             break;
         }
         case (2):
         {
             posX = GetRandomValue((SCREENWIDTH / 2) - 30, (SCREENWIDTH / 2) + 30);
-            posY = SCREENHEIGHT;
+            posY = GetRandomValue(SCREENHEIGHT - 20, SCREENHEIGHT + 20);
             break;
         }
         case (3):
         {
-            posX = SCREENWIDTH;
+            posX = GetRandomValue(SCREENWIDTH - 20, SCREENWIDTH + 20);
             posY = GetRandomValue((SCREENHEIGHT / 2), (SCREENHEIGHT / 2) + 10);
             break;
         }
     }
 
-    // if (static_cast<int>(posX) & 1) {
-      direction = (Vector2){0.1f, 0.1f};
-    // } else {
-    //   direction = (Vector2){-posX / 100, posY / 100};
-    // } // old pseudo-random path finder. now reworking so that they go towards the player
+    direction = (Vector2){0.02f, 0.02f};
     radius = 10; // default radius. this is changed later
     threshold = false;
 }

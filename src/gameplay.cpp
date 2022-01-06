@@ -44,7 +44,7 @@ Game::Game(std::string const & path)
     }
     player = new Entity;
     player->posX = 0;
-    player->posY = SCREENHEIGHT / 2;
+    player->posY = SCREENHEIGHT / 2.0f;
     player->direction.x = 100;
     player->direction.y = 100;
     player->radius = 10;
@@ -109,25 +109,29 @@ int Game::tick() const
     for (auto  en = enemies->begin(); en != enemies->end(); en++)
     {
         if (en->hp != 0)
-      {
-        if (en->posX >= SCREENWIDTH || en->posX <= 0) {
-          en->direction.x = -en->direction.x;
-        }
-        if (en->posY >= SCREENHEIGHT || en->posY <= 0) {
-          en->direction.y = -en->direction.y;
-        }
-        if (en->posX >= player->posX) {
-          en->direction.x -= 0.1f;
-        }
-        if (en->posY >= player->posY) {
-          en->direction.y -= 0.1f;
-        }
-        if (en->posX <= player->posX) {
-          en->direction.x += 0.1f;
-        }
-        if (en->posY <= player->posY) {
-          en->direction.y += 0.1f;
-        }
+        {
+            if (en->posX >= SCREENWIDTH || en->posX <= 0) {
+                en->direction.x = -en->direction.x;
+            }
+            if (en->posY >= SCREENHEIGHT || en->posY <= 0) {
+                en->direction.y = -en->direction.y;
+            }
+            if (en->posX >= player->posX) {
+                en->posX -= 2.1f;
+                en->direction.x -= 0.1f;
+            }
+            if (en->posY >= player->posY) {
+                en->posY -= 2.1f;
+                en->direction.y -= 0.1f;
+            }
+            if (en->posX <= player->posX) {
+                en->posX += 2.1f;
+                en->direction.x += 0.1f;
+            }
+            if (en->posY <= player->posY) {
+                en->posY += 2.1f;
+                en->direction.y += 0.1f;
+            }
       } else {
             if (en->posX >= SCREENWIDTH || en->posX <= 0 || en->posY >= SCREENHEIGHT ) {
               enemies->erase(en);
@@ -135,7 +139,7 @@ int Game::tick() const
             }
         }
 
-      en->posX += en->direction.x;
+      en->posX += en->direction.x; // zoning better
       en->posY += en->direction.y;
       if (en->hp != 0 && // check for player death (one shot one kill)
           CheckCollisionCircles((Vector2){player->posX, player->posY}, 10,
@@ -246,8 +250,8 @@ Game::shoot() const
                 CheckCollisionPointLine((Vector2){en->posX, en->posY}, (Vector2){player->posX, player->posY}, add2, (en->radius * 2)))
             { // enemy hit
               en->hp = 0;
-              en->direction.x = (player->direction.x / 2);
-              en->direction.y = (player->direction.y / 2);
+              en->direction.x = player->direction.x;
+              en->direction.y = player->direction.y;
               player->victims++;
               player->fury++;
               DrawLineEx((Vector2){player->posX, player->posY}, add1, 10,
