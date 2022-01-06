@@ -10,6 +10,7 @@ add_executable(${PROJECT_NAME}
     src/window.cpp
     src/gameplay.cpp
     src/weapon.cpp
+    src/wp_shotty.cpp
     src/terrain.cpp
     src/entity.cpp)
 

@@ -13,6 +13,7 @@
 #include <raylib.h>
 
 #include "weapon.hpp"
+#include "wp_shotty.hpp"
 
 Game::Game(std::string const & path) : current(path)
 {
@@ -73,7 +74,7 @@ Game::Game(std::string const & path) : current(path)
     player->radius = 10;
     player->victims = 0;
     player->fury = 0;
-    player->wp = new Weapon(10, 10, 10,
+    player->wp = new wp_shotty(10, 10, 10,
             SHOTTY_BANG,
             SHOTTY_RELOAD);
     player->idleTex = LoadTexture(MUCHACHO_TEX);

@@ -25,7 +25,7 @@ class Entity {
         double furyTime;
         double reloadTime;
         Vector2 direction;
-        Weapon * wp;
+        AWeapon * wp;
         Image img;
         Texture2D idleTex;
         Texture2D hurtTex;

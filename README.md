@@ -36,10 +36,10 @@ cmake ..
 ## TODO
 
 ### Weapons
-- reload
-- visual representation of mag
-- more weapons (gravity gun ?)
+- [DONE]reload 
+- [DONE]visual representation of mag
+- [TODO]more weapons (gravity gun ?)
 
 ### Maps
 - more
-- terrain
+- terrain ?

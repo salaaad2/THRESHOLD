@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-Weapon::Weapon(float const & rg, unsigned int const & dmg, unsigned int const & mag, const char *s, const char *r) :
+AWeapon::AWeapon(float const & rg, unsigned int const & dmg, unsigned int const & mag, const char *s, const char *r) :
     range(rg), damage(dmg), max(mag)
 {
     InitAudioDevice();
@@ -21,24 +21,11 @@ Weapon::Weapon(float const & rg, unsigned int const & dmg, unsigned int const & 
     barrel = max;
 }
 
-Weapon::~Weapon() {}
+AWeapon::~AWeapon() {}
 
-void Weapon::refill()
+void AWeapon::refill()
 {
     std::cout << "reload" << std::endl;
     PlaySound(reload);
     barrel = max;
-}
-
-int Weapon::bang()
-{
-    if (barrel == 0)
-    {
-        return (1);
-    } else {
-        barrel--;
-        std::cout << "BANG : " << barrel << "shots left" << std::endl;
-        PlaySound(shot);
-        return (0);
-    }
 }

@@ -11,7 +11,8 @@
 
 #include "raylib.h"
 
-class Weapon {
+class AWeapon {
+protected:
   Sound shot;
   Sound reload;
 
@@ -22,10 +23,10 @@ class Weapon {
   unsigned int const &damage;
 
 public:
-  Weapon(float const &rg, unsigned int const &dmg, unsigned int const & mag, const char *s, const char *r);
-  ~Weapon();
+  AWeapon(float const &rg, unsigned int const &dmg, unsigned int const & mag, const char *s, const char *r);
+  ~AWeapon();
 
-  int bang();
+  virtual int bang() = 0;
   void refill();
 
   bool empty;
