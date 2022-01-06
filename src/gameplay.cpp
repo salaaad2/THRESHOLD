@@ -107,6 +107,7 @@ void Game::draw() const
     auto texSize = (enemies->at(0).radius / 40.0f);
     for (auto & en : *enemies)
     {
+        DrawCircle(en.posX, en.posY, en.radius, GREEN);
         if (en.hp == 0)
             DrawTextureEx(en.hurtTex, (Vector2){en.posX - 20, en.posY - 20}, 1.0f, 0.6f, WHITE);
         else {
@@ -237,7 +238,6 @@ int Game::getKeys() const
             }
         }
     } else {
-        std::cout << "tick now" << std::endl;
         if (this->tick()) {
             return (1);
         }

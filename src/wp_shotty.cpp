@@ -19,7 +19,6 @@ int wp_shotty::bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vect
         return (1);
     } else {
         barrel--;
-        std::cout << "BANG : " << barrel << "shots left" << std::endl;
         PlaySound(shot);
         // here
         //
@@ -39,6 +38,7 @@ int wp_shotty::bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vect
                 CheckCollisionPointLine((Vector2){en->posX, en->posY}, playerPosition, Vector2Add(playerPosition, r), (en->radius * 2)) ||
                 CheckCollisionPointLine((Vector2){en->posX, en->posY}, playerPosition, add2, (en->radius * 2)))
             { // enemy hit
+                std::cout << "hit" << std::endl;
                 en->hp--;
                 if (en->hp == 0)
                 {
