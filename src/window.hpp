@@ -17,7 +17,7 @@ int initWindow(void);
 #define SCREENHEIGHT 900
 
 typedef enum gameState {
-TITLE = 0, GAMEPLAY, NEXT, ENDING
+TITLE = 0, PICK, GAMEPLAY, NEXT, ENDING
 } gameState ;
 
 #endif // WINDOW_H_
