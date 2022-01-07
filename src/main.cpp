@@ -10,18 +10,32 @@
 #include "window.hpp"
 #include "gameplay.hpp"
 #include <iostream>
-#include <filesystem>
-#include <raylib.h>
+#include <raylib.h> // basic libs
+
+#include <map>
+#include <filesystem> // additional libs
 
 gameState gs = TITLE;
 
+std::map<int, std::string> pick;
 
 int main(void) {
   initWindow();
+  InitWindow(SCREENWIDTH, SCREENHEIGHT, "WIP -- muchashooter THRESHOLD");
+  auto nPick = 0;
 
-  // Main game loop
-  InitWindow(SCREENWIDTH, SCREENHEIGHT, "WIP -- coolspace");
   Game* game = nullptr;
+
+    std::string path = "../meta/maps";
+    int i = 0;
+    for (const auto & entry : std::filesystem::directory_iterator(path)) { // c++17 lol
+        if (entry.path().filename().generic_string().find("start") != std::string::npos)
+        {
+            pick[i] = entry.path().filename().generic_string();
+        }
+        i++;
+    }
+  // Main game loop
   while (!WindowShouldClose()) /* Detect window close button or ESC key */
   {
     switch (gs) {
@@ -42,7 +56,7 @@ int main(void) {
             }
             if (IsKeyPressed(KEY_DOWN))
             {
-                // pick++
+                nPick++;
             }
         }
         case (GAMEPLAY):
@@ -94,16 +108,17 @@ int main(void) {
         }
         case (PICK):
         {
-            std::string path = "../meta/maps";
-            int i = 0;
             DrawRectangle(200, 100, 1200, 700, RAYWHITE);
             DrawRectangle(250, 150, 1100, 600, COOLPURPLE);
             DrawRectangle(300, 200, 1000, 500, RAYWHITE);
-            for (const auto & entry : std::filesystem::directory_iterator(path)) {
-                DrawText("TEST", SCREENWIDTH / 2, (SCREENHEIGHT / 2) + i * 40, 40, COOLPURPLE);
-                i++;
-            }
             DrawText("THRESHOLD", 260, 160, 30, RAYWHITE);
+
+            for (auto n = 0 ; n < pick.size(); n++)
+            {
+                DrawText(pick[n].c_str(), SCREENWIDTH / 2,
+                        (SCREENHEIGHT / 2) + n * 40, 40, COOLPURPLE);
+            }
+
             break ;
         }
         case (GAMEPLAY):
