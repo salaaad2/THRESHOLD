@@ -91,6 +91,9 @@ int main(void) {
         case (NEXT):
         {
             ClearBackground(COOLPURPLE);
+            DrawCircle(SCREENWIDTH / 2, SCREENHEIGHT / 2, 200, BLACK);
+            DrawText("STAGE CLEARED\nNEXT LEVEL :\n", (SCREENWIDTH / 2) - 200, (SCREENHEIGHT / 2) - 50, 40, WHITE);
+            DrawText(game->getNext().c_str(), (SCREENWIDTH / 2) - 100, (SCREENHEIGHT / 2) + 50, 40, WHITE);
             break ;
         }
         case (ENDING):

@@ -46,8 +46,8 @@ int wp_assaultrifle::bang(std::vector<Entity> * enemies, Entity * player)
                 {
                     en->direction.x = (playerDirection.x / 2);
                     en->direction.y = (playerDirection.y / 2);
+                    player->victims += 1;
                 }
-                player->victims += 1;
                 player->fury += 1;
                 break ;
             }
