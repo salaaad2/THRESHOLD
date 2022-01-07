@@ -72,7 +72,7 @@ int main(void) {
     switch (gs) {
         case (TITLE):
         {
-            DrawCircle(SCREENWIDTH / 2, SCREENHEIGHT / 2, 200, BLACK);
+            DrawRectangle((SCREENWIDTH / 2), (SCREENHEIGHT / 2), 200, 200, BLACK);
             DrawText("THRESHOLD", (SCREENWIDTH / 2) - 140, SCREENHEIGHT / 2, 40, RED);
             DrawText("PRESS ENTER", (SCREENWIDTH / 2) - 140, (SCREENHEIGHT / 2) + 50, 40, MAROON);
             break ;
