@@ -32,8 +32,8 @@ int main(void) {
         if (entry.path().filename().generic_string().find("start") != std::string::npos)
         {
             pick[i] = entry.path().filename().generic_string();
+            i++;
         }
-        i++;
     }
   // Main game loop
   while (!WindowShouldClose()) /* Detect window close button or ESC key */
@@ -51,12 +51,19 @@ int main(void) {
         {
             if (IsKeyPressed(KEY_ENTER))
             {
+                std::string s(path);
+                s += pick[nPick];
+                game = new Game(s);
                 gs = GAMEPLAY;
                 game->start();
             }
-            if (IsKeyPressed(KEY_DOWN))
+            if (IsKeyPressed(KEY_DOWN) && nPick < (pick.size() - 1))
             {
                 nPick++;
+            }
+            if (IsKeyPressed(KEY_UP) && nPick > 0)
+            {
+                nPick--;
             }
         }
         case (GAMEPLAY):
@@ -101,8 +108,8 @@ int main(void) {
         {
             DrawRectangle(200, 100, 1200, 700, RAYWHITE);
             DrawRectangle(250, 150, 1100, 600, COOLPURPLE);
-            DrawRectangle(300, 200, 1000, 500, RAYWHITE);
             DrawText("THRESHOLD", 260, 160, 30, RAYWHITE);
+            DrawRectangle(300, 200, 1000, 500, RAYWHITE);
             DrawText("PRESS ENTER", (SCREENWIDTH / 2) - 140, (SCREENHEIGHT / 2) + 50, 40, MAROON);
             break ;
         }
@@ -113,10 +120,11 @@ int main(void) {
             DrawRectangle(300, 200, 1000, 500, RAYWHITE);
             DrawText("THRESHOLD", 260, 160, 30, RAYWHITE);
 
+            DrawRectangle(350, 240 + (nPick * 40), 900, 50, PURPLE);
             for (auto n = 0 ; n < pick.size(); n++)
             {
-                DrawText(pick[n].c_str(), SCREENWIDTH / 2,
-                        (SCREENHEIGHT / 2) + n * 40, 40, COOLPURPLE);
+                DrawText(pick[n].c_str(), 400,
+                        240 + (n * 40), 40, COOLPURPLE);
             }
 
             break ;
