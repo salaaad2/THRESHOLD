@@ -277,7 +277,7 @@ Game::shoot() const
         if (player->currentWeapon->empty == true) {
             return (0);
         }
-        player->currentWeapon->bang(enemies, player->direction, (Vector2){player->posX, player->posY}, &player->victims);
+        player->currentWeapon->bang(enemies, player);
         if (player->currentWeapon->empty == true) {
             player->reloadTime = GetTime();
         }

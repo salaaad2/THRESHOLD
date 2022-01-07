@@ -38,7 +38,7 @@ public:
             const char *r);
   ~AWeapon();
 
-  virtual int bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vector2 playerPosition, int * victims) = 0;
+  virtual int bang(std::vector<Entity> * enemies, Entity * player) = 0;
   void refill();
 
   bool empty;

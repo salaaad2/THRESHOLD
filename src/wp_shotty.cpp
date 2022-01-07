@@ -7,18 +7,20 @@
 #include "entity.hpp"
 
 wp_shotty::wp_shotty(const char *s, const char *r)
-    : AWeapon(10, 10, 10, 1.0, s, r)
+    : AWeapon(10, 10, 10, 0.5, s, r)
 {}
 
 
 
-int wp_shotty::bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vector2 playerPosition, int * victims)
+int wp_shotty::bang(std::vector<Entity> * enemies, Entity * player)
 {
     if (barrel == 0 ||
         GetTime() < (t + cooldown))
     {
         return (1);
     } else {
+        Vector2 playerDirection = player->direction;
+        Vector2 playerPosition = (Vector2){player->posX, player->posY};
         barrel--;
         PlaySound(shot);
         t = GetTime();
@@ -48,7 +50,8 @@ int wp_shotty::bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vect
                     en->direction.x = (playerDirection.x / 2);
                     en->direction.y = (playerDirection.y / 2);
                 }
-                *victims += 1;
+                player->victims += 1;
+                player->fury += 1;
             }
         }
         // shotty cone

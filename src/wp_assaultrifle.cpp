@@ -12,7 +12,7 @@ wp_assaultrifle::wp_assaultrifle(const char *s, const char *r)
 
 
 
-int wp_assaultrifle::bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vector2 playerPosition, int * victims)
+int wp_assaultrifle::bang(std::vector<Entity> * enemies, Entity * player)
 {
     if (barrel == 0)
     {
@@ -22,6 +22,8 @@ int wp_assaultrifle::bang(std::vector<Entity> * enemies, Vector2 playerDirection
         PlaySound(shot);
         // here
         //
+        Vector2 playerDirection = player->direction;
+        Vector2 playerPosition = (Vector2){player->posX, player->posY};
         auto rot1 = Vector2Rotate(playerDirection, -0.2f);
         auto rot2 = Vector2Rotate(playerDirection, 0.2f);
 
@@ -29,8 +31,8 @@ int wp_assaultrifle::bang(std::vector<Entity> * enemies, Vector2 playerDirection
         auto add2 = Vector2Add(playerPosition, rot2);
 
         auto r = playerDirection;
-        r.x *= 2;
-        r.y *= 2;
+        r.x *= 4;
+        r.y *= 4;
 
         for (auto en = enemies->begin(); en != enemies->end(); en++)
         {
@@ -45,7 +47,9 @@ int wp_assaultrifle::bang(std::vector<Entity> * enemies, Vector2 playerDirection
                     en->direction.x = (playerDirection.x / 2);
                     en->direction.y = (playerDirection.y / 2);
                 }
-                *victims += 1;
+                player->victims += 1;
+                player->fury += 1;
+                break ;
             }
         }
         // assaultrifle cone
