@@ -52,6 +52,7 @@ int main(void) {
             if (IsKeyPressed(KEY_ENTER))
             {
                 std::string s(path);
+                s += "/";
                 s += pick[nPick];
                 game = new Game(s);
                 gs = GAMEPLAY;
@@ -126,7 +127,6 @@ int main(void) {
                 DrawText(pick[n].c_str(), 400,
                         240 + (n * 40), 40, COOLPURPLE);
             }
-
             break ;
         }
         case (GAMEPLAY):
