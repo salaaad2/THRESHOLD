@@ -20,6 +20,10 @@
 #define SHOTTY_BANG    "../meta/media/mp3/shotty_shoot.mp3"
 #define SHOTTY_RELOAD  "../meta/media/mp3/shotty_reload.mp3"
 
+#define AR_BANG    "../meta/media/mp3/ar_shoot.mp3"
+#define AR_RELOAD  "../meta/media/mp3/shotty_reload.mp3"
+
+
 // player textures
 #define MUCHACHO_TEX "../meta/media/sprites/cowboy_idle.png"
 

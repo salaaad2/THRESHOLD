@@ -14,6 +14,7 @@
 #include <raylib.h>
 
 #include "weapon.hpp"
+#include "wp_assaultrifle.hpp"
 #include "wp_shotty.hpp"
 
 Game::Game(std::string const & path) : current(path)
@@ -75,9 +76,19 @@ Game::Game(std::string const & path) : current(path)
     player->radius = 10;
     player->victims = 0;
     player->fury = 0;
-    player->wp = new wp_shotty(10, 10, 10,
+    InitAudioDevice();
+    AWeapon * shotty = new wp_shotty(
             SHOTTY_BANG,
-            SHOTTY_RELOAD);
+            SHOTTY_RELOAD
+    );
+    AWeapon * ar = new wp_assaultrifle(
+        AR_BANG,
+        SHOTTY_RELOAD // TODO: get sound
+    );
+
+    player->wp[0] = shotty;
+    player->wp[1] = ar;
+    player->currentWeapon = player->wp[0];
     player->idleTex = LoadTexture(MUCHACHO_TEX);
 }
 
@@ -125,7 +136,7 @@ void Game::draw() const
     if (player->fury >= 5) {
         DrawText("[E] FURY", SCREENWIDTH - 300, 10, 50, RED);
     }
-    for (auto i = 0; i < player->wp->barrel; i++) {
+    for (auto i = 0; i < player->currentWeapon->barrel; i++) {
         DrawRectangle(40 + (i * 20), SCREENHEIGHT - 60, 10, 30, RED);
     }
 }
@@ -208,6 +219,12 @@ int Game::getKeys() const
         player->threshold = true;
         player->fury = 0;
     }
+    if (IsKeyDown(KEY_ONE)) {
+        player->currentWeapon = player->wp[0];
+    }
+    if (IsKeyDown(KEY_TWO)) {
+        player->currentWeapon = player->wp[1];
+    }
     if (IsKeyDown(KEY_LEFT)) {
         player->direction = Vector2Rotate(player->direction, -0.1f); // left
     }
@@ -242,11 +259,11 @@ int Game::getKeys() const
             return (1);
         }
     }
-    if (player->wp->empty) {
+    if (player->currentWeapon->empty) {
         if (GetTime() >= (player->reloadTime + 2))
         {
-            player->wp->refill();
-            player->wp->empty = false;
+            player->currentWeapon->refill();
+            player->currentWeapon->empty = false;
         }
     }
     return (0);
@@ -257,11 +274,11 @@ int
 Game::shoot() const
 {
 
-        if (player->wp->empty == true) {
+        if (player->currentWeapon->empty == true) {
             return (0);
         }
-        player->wp->bang(enemies, player->direction, (Vector2){player->posX, player->posY}, &player->victims);
-        if (player->wp->empty == true) {
+        player->currentWeapon->bang(enemies, player->direction, (Vector2){player->posX, player->posY}, &player->victims);
+        if (player->currentWeapon->empty == true) {
             player->reloadTime = GetTime();
         }
         return (0);

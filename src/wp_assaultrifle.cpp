@@ -1,4 +1,4 @@
-#include "wp_shotty.hpp"
+#include "wp_assaultrifle.hpp"
 
 #include <iostream>
 #include <raymath.h>
@@ -6,13 +6,13 @@
 
 #include "entity.hpp"
 
-wp_shotty::wp_shotty(const char *s, const char *r)
-    : AWeapon(10, 10, 10, s, r)
+wp_assaultrifle::wp_assaultrifle(const char *s, const char *r)
+    : AWeapon(100, 10, 30, s, r)
 {}
 
 
 
-int wp_shotty::bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vector2 playerPosition, int * victims)
+int wp_assaultrifle::bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vector2 playerPosition, int * victims)
 {
     if (barrel == 0)
     {
@@ -48,7 +48,7 @@ int wp_shotty::bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vect
                 *victims += 1;
             }
         }
-        // shotty cone
+        // assaultrifle cone
         DrawLineEx(playerPosition, add1, 10, ORANGE);
         DrawLineEx(playerPosition,
                    Vector2Add(playerPosition,

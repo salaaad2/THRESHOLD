@@ -11,6 +11,7 @@ add_executable(${PROJECT_NAME}
     src/gameplay.cpp
     src/weapon.cpp
     src/wp_shotty.cpp
+    src/wp_assaultrifle.cpp
     src/terrain.cpp
     src/entity.cpp)
 

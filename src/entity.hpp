@@ -12,6 +12,7 @@
 #include "window.hpp"
 
 #include "weapon.hpp"
+#include <map>
 
 class Entity {
     public:
@@ -25,7 +26,8 @@ class Entity {
         double furyTime;
         double reloadTime;
         Vector2 direction;
-        AWeapon * wp;
+        std::map<int, AWeapon*> wp;
+        AWeapon * currentWeapon;
         Image img;
         Texture2D idleTex;
         Texture2D hurtTex;

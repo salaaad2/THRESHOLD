@@ -22,6 +22,9 @@ protected:
 
   unsigned int max;
 
+  double cooldown;
+  double t;
+
 
   float const &range;
   unsigned int const &damage;
