@@ -10,8 +10,13 @@
 
 #include <iostream>
 
-AWeapon::AWeapon(float const & rg, unsigned int const & dmg, unsigned int const & mag, const char *s, const char *r) :
-    range(rg), damage(dmg), max(mag)
+AWeapon::AWeapon(float const & rg,
+                 unsigned int const & dmg,
+                 unsigned int const & mag,
+                 double const & cd,
+                 const char *s,
+                 const char *r) :
+    range(rg), damage(dmg), max(mag), cooldown(cd)
 {
     shot = LoadSound(s);
     reload = LoadSound(r);

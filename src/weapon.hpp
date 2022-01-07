@@ -30,7 +30,12 @@ protected:
   unsigned int const &damage;
 
 public:
-  AWeapon(float const &rg, unsigned int const &dmg, unsigned int const & mag, const char *s, const char *r);
+    AWeapon(float const &rg,
+            unsigned int const &dmg,
+            unsigned int const & mag,
+            double const & cooldown,
+            const char *s,
+            const char *r);
   ~AWeapon();
 
   virtual int bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vector2 playerPosition, int * victims) = 0;

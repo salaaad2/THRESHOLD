@@ -7,7 +7,7 @@
 #include "entity.hpp"
 
 wp_assaultrifle::wp_assaultrifle(const char *s, const char *r)
-    : AWeapon(100, 10, 30, s, r)
+    : AWeapon(100, 10, 30, 0.0, s, r)
 {}
 
 

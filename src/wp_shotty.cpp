@@ -7,19 +7,22 @@
 #include "entity.hpp"
 
 wp_shotty::wp_shotty(const char *s, const char *r)
-    : AWeapon(10, 10, 10, s, r)
+    : AWeapon(10, 10, 10, 1.0, s, r)
 {}
 
 
 
 int wp_shotty::bang(std::vector<Entity> * enemies, Vector2 playerDirection, Vector2 playerPosition, int * victims)
 {
-    if (barrel == 0)
+    if (barrel == 0 ||
+        GetTime() < (t + cooldown))
     {
         return (1);
     } else {
         barrel--;
         PlaySound(shot);
+        t = GetTime();
+        std::cout << "current time : " << t << "supposed time before next shot : " << (t + cooldown) << std::endl;
         // here
         //
         auto rot1 = Vector2Rotate(playerDirection, -0.2f);
