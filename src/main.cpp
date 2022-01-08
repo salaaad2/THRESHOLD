@@ -67,6 +67,22 @@ int main(void) {
                 nPick--;
             }
         }
+        case (DEATH):
+        {
+            std::string current;
+            if (game != nullptr)
+            {
+                current = game->getCurrent();
+                delete game;
+            }
+
+          if (IsKeyPressed(KEY_ENTER)) {
+            CloseAudioDevice();
+            game = new Game(current);
+            gs = GAMEPLAY;
+          }
+            break ;
+        }
         case (GAMEPLAY):
         {
             break ;
@@ -75,14 +91,15 @@ int main(void) {
         {
             if (IsKeyPressed(KEY_ENTER))
             {
-                gs = TITLE;
                 std::string next("../meta/maps/");
                 next += game->getNext();
 
                 delete game;
                 CloseAudioDevice();
+                std::cout << "next level " << next << std::endl;
                 if (game->getNext() != "0") {
                     game = new Game(next);
+                    gs = GAMEPLAY;
                 }
             }
             break ;
@@ -129,11 +146,19 @@ int main(void) {
             }
             break ;
         }
+        case (DEATH):
+        {
+            DrawRectangle(250, 150, 1100, 600, COOLPURPLE);
+            ClearBackground(COOLPURPLE);
+            DrawCircle(SCREENWIDTH / 2, SCREENHEIGHT / 2, 200, BLACK);
+            DrawText("YOU DIED", (SCREENWIDTH / 2) - 200, (SCREENHEIGHT / 2) - 50, 40, WHITE);
+            DrawText(game->getCurrent().c_str(), (SCREENWIDTH / 2) - 100, (SCREENHEIGHT / 2) + 50, 40, WHITE);
+        }
         case (GAMEPLAY):
         {
             if (auto code = game->getKeys()) {
                 if (code == 1) // death
-                {gs = ENDING;}
+                {gs = DEATH;}
                 else if (code == 2) // level end
                 {gs = NEXT;}
             }
@@ -145,7 +170,7 @@ int main(void) {
             ClearBackground(COOLPURPLE);
             DrawCircle(SCREENWIDTH / 2, SCREENHEIGHT / 2, 200, BLACK);
             DrawText("STAGE CLEARED\nNEXT LEVEL :\n", (SCREENWIDTH / 2) - 200, (SCREENHEIGHT / 2) - 50, 40, WHITE);
-            DrawText(game->getNext().c_str(), (SCREENWIDTH / 2) - 100, (SCREENHEIGHT / 2) + 50, 40, WHITE);
+            DrawText(game->getNext().c_str(), (SCREENWIDTH / 2) - 100, (SCREENHEIGHT / 2) + 60, 40, WHITE);
             break ;
         }
         case (ENDING):
