@@ -56,7 +56,7 @@ Game::Game(std::string const& path) : current(path) {
     }
     ifs.close();
     enemies = new std::vector<Entity>;
-    for (auto i = 0; i < nEnemies; i++) {
+    for (auto i = 0; i < nPerWave; i++) {
         if (ehp == 0) {
             Entity en(ehp);
             en.radius = radius;
@@ -152,7 +152,7 @@ void Game::draw() {
 
 // progress the game & check for player death
 // NEW: go towards player NEXT: spawn at different furyTimes
-int Game::tick() const {
+int Game::tick() {
     auto target = GetMousePosition();
 
     DrawLine(player->posX, player->posY, target.x, target.y, RAYWHITE);
@@ -163,6 +163,20 @@ int Game::tick() const {
     DrawText(std::to_string(v2.y).c_str(), 1400, 30, 20, RED);
 
     player->direction = v2;
+
+    if (player->victims == nPerWave && nWaves > 1) {
+        nWaves--;
+        std::cout << "DEBUG : waves left [" << nWaves << std::endl;
+        std::cout << "DEBUG : victims [" << nWaves << std::endl;
+        for (int i = 0 ; i < nPerWave; i++) {
+            Entity en(1);
+            en.radius = 20;
+            en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
+            en.hurtTex = LoadTexture(SBIRE_TEX_HURT);
+            enemies->push_back(en);
+            std::cout << "DEBUG : spawn new enemy [" << i << std::endl;
+        }
+    }
 
     for (auto en = enemies->begin(); en != enemies->end(); en++) {
         if (en->hp > 0) {
@@ -207,7 +221,7 @@ int Game::tick() const {
     return (0);
 }
 
-int Game::getKeys() const {
+int Game::getKeys() {
     auto oldX = 0, oldY = 0;  // get position before processing keys to check
                               // for player movement in threshold mode
     oldX = player->posX;
