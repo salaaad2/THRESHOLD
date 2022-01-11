@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-AWeapon::AWeapon(float const & rg,
+AWeapon::AWeapon(float const  rg,
                  unsigned int const & dmg,
                  unsigned int const & mag,
                  double const & cd,

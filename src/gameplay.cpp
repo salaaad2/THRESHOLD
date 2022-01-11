@@ -222,7 +222,7 @@ int Game::tick() const
       if (en->hp != 0 && // check for player death (one shot one kill)
           CheckCollisionCircles((Vector2){player->posX, player->posY}, 10,
                                 (Vector2){en->posX, en->posY}, 40)) {
-            return (1);
+            std::cout << "cool" << std::endl;
         }
     }
     return (0);

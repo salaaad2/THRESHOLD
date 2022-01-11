@@ -26,11 +26,11 @@ protected:
   double t;
 
 
-  float const &range;
+  float const range;
   unsigned int const &damage;
 
 public:
-    AWeapon(float const &rg,
+    AWeapon(float const rg,
             unsigned int const &dmg,
             unsigned int const & mag,
             double const & cooldown,
