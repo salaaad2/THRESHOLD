@@ -35,7 +35,6 @@ int wp_shotty::bang(std::vector<Entity> * enemies, Entity * player)
         t = GetTime();
         // here
         //
-        std::cout << "range : " << range << std::endl;
         r = playerDirection;
         r.x *= 2;
         r.y *= 2;

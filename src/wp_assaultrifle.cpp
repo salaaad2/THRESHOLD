@@ -7,7 +7,7 @@
 #include "entity.hpp"
 
 wp_assaultrifle::wp_assaultrifle(const char *s, const char *r)
-    : AWeapon(100, 10, 30, 0.0, s, r)
+    : AWeapon(300.0f, 10, 30, 0.0, s, r)
 {}
 
 
@@ -18,22 +18,25 @@ int wp_assaultrifle::bang(std::vector<Entity> * enemies, Entity * player)
     {
         return (1);
     } else {
+        Vector2 playerDirection = Vector2Normalize(player->direction);
+        playerDirection.x *= range;
+        playerDirection.y *= range;
+        Vector2 playerPosition = (Vector2){player->posX, player->posY};
+        Vector2 rot1 = Vector2Rotate(playerDirection, -0.2f);
+        Vector2 rot2 = Vector2Rotate(playerDirection, 0.2f);
+
+        Vector2 add1 = Vector2Add(playerPosition, rot1);
+        Vector2 add2 = Vector2Add(playerPosition, rot2);
+
+        Vector2 r;
         barrel--;
         PlaySound(shot);
+        t = GetTime();
         // here
         //
-        Vector2 playerDirection = player->direction;
-        Vector2 playerPosition = (Vector2){player->posX, player->posY};
-        auto rot1 = Vector2Rotate(playerDirection, -0.2f);
-        auto rot2 = Vector2Rotate(playerDirection, 0.2f);
-
-        auto add1 = Vector2Add(playerPosition, rot1);
-        auto add2 = Vector2Add(playerPosition, rot2);
-
-        auto r = playerDirection;
-        r.x *= 4;
-        r.y *= 4;
-
+        r = playerDirection;
+        r.x *= 2;
+        r.y *= 2;
         for (auto en = enemies->begin(); en != enemies->end(); en++)
         {
             if (CheckCollisionPointLine((Vector2){en->posX, en->posY}, playerPosition, add1, (en->radius * 2)) ||

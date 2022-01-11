@@ -158,16 +158,6 @@ void Game::draw()
 
 }
 
-int Game::getDiff(Vector2 pos, Vector2 tip, Vector2 target) const
-{
-    if(((tip.x-pos.x)*(target.y-pos.y)-(tip.y-pos.y)*(target.x-pos.x))<0)
-        return -1;
-    if(((tip.x-pos.x)*(target.y-pos.y)-(tip.y-pos.y)*(target.x-pos.x))>0)
-        return 1;
-
-    return 0;
-}
-
 // progress the game & check for player death
 // NEW: go towards player NEXT: spawn at different furyTimes
 int Game::tick() const
@@ -222,7 +212,7 @@ int Game::tick() const
       if (en->hp != 0 && // check for player death (one shot one kill)
           CheckCollisionCircles((Vector2){player->posX, player->posY}, 10,
                                 (Vector2){en->posX, en->posY}, 40)) {
-            std::cout << "cool" << std::endl;
+            return (1);
         }
     }
     return (0);
@@ -263,14 +253,7 @@ int Game::getKeys() const
     if (IsKeyDown(KEY_TWO)) {
         player->currentWeapon = player->wp[1];
     }
-    if (IsKeyDown(KEY_LEFT)) {
-        player->direction = Vector2Rotate(player->direction, -0.1f); // left
-    }
-    if (IsKeyDown(KEY_RIGHT)) {
-        player->direction = Vector2Rotate(player->direction, 0.1f);
-    }
-    if (IsKeyPressed(KEY_SPACE)) {
-        std::cout << "key space";
+    if (IsKeyPressed(KEY_SPACE) || IsMouseButtonPressed(MOUSE_BUTTON_LEFT)) {
         if (shoot()) {
             return (0);
         }
@@ -280,14 +263,12 @@ int Game::getKeys() const
     }
     if (player->threshold)
     {
-        if (GetTime() >= (player->furyTime + 5))
-        {
+        if (GetTime() >= (player->furyTime + 5)) {
             player->fury = 0;
             player->threshold = false;
         }
         if (oldX != player->posX ||
-            oldY != player->posY)
-        {
+            oldY != player->posY) {
             if (this->tick()) {
                 return (1);
             }

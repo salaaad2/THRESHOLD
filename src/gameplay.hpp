@@ -41,7 +41,7 @@ class Game {
     int nWaves; // number of waves in level
     int nPerWave; // number of enemies per wave.
 
-    // NOTE : maps are assumed to be correct. tyhus, no
+    // NOTE : maps are assumed to be correct. therefore, no
     // checks are made to verify their integrity.
     // having wrong maps can (and probably will) result in a crash
 
@@ -74,8 +74,6 @@ class Game {
     int getKeys() const;
     int shoot() const;
     int hit(Entity en, Vector2 add1, Vector2 add2) const ;
-
-    int getDiff(Vector2 pos, Vector2 tip, Vector2 target) const ;
 
     std::string const &getNext() const; // returns next level's string
     std::string const &getCurrent() const; // returns next level's string
