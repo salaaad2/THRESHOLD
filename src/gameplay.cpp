@@ -12,8 +12,10 @@
 #include <fstream>
 #include <iostream>
 #include <raylib.h>
+#include <string>
 
 #include "weapon.hpp"
+#include "window.hpp"
 #include "wp_assaultrifle.hpp"
 #include "wp_shotty.hpp"
 
@@ -50,6 +52,13 @@ Game::Game(std::string const & path) : current(path)
                 ehp = std::atoi(tok.c_str());
             }
         }
+        if (tok == "WAVES")
+        {
+            ifs >> tok;
+            nWaves = std::atoi(tok.c_str());
+            ifs >> tok;
+            nPerWave = std::atoi(tok.c_str());
+        }
     }
     ifs.close();
     enemies = new std::vector<Entity>;
@@ -65,7 +74,7 @@ Game::Game(std::string const & path) : current(path)
         en.radius = radius;
             en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
             en.hurtTex = LoadTexture(SBIRE_TEX_HURT);
-            enemies->push_back(en);
+            enemies->push_back(en); // legacy code. TODO: remove
         }
     }
     player = new Entity;
@@ -77,6 +86,11 @@ Game::Game(std::string const & path) : current(path)
     player->victims = 0;
     player->fury = 0;
     InitAudioDevice();
+
+    cam.target = (Vector2){player->posX, player->posY};
+    cam.offset = (Vector2){SCREENWIDTH / 2.0f, SCREENHEIGHT / 2.0f};
+    cam.rotation = 0.0f;
+    cam.zoom = 1.0f;
     AWeapon * shotty = new wp_shotty(
             SHOTTY_BANG,
             SHOTTY_RELOAD
@@ -111,10 +125,12 @@ void Game::start()
 }
 
 // draw bad boys and player
-void Game::draw() const
+void Game::draw()
 {
     auto left = std::to_string(enemies->size());
 
+    cam.target.x = player->posX;
+    EndMode2D();
     auto texSize = (enemies->at(0).radius / 40.0f);
     for (auto & en : *enemies)
     {
@@ -139,13 +155,35 @@ void Game::draw() const
     for (auto i = 0; i < player->currentWeapon->barrel; i++) {
         DrawRectangle(40 + (i * 20), SCREENHEIGHT - 60, 10, 30, RED);
     }
+
 }
 
+int Game::getDiff(Vector2 pos, Vector2 tip, Vector2 target) const
+{
+    if(((tip.x-pos.x)*(target.y-pos.y)-(tip.y-pos.y)*(target.x-pos.x))<0)
+        return -1;
+    if(((tip.x-pos.x)*(target.y-pos.y)-(tip.y-pos.y)*(target.x-pos.x))>0)
+        return 1;
+
+    return 0;
+}
 
 // progress the game & check for player death
 // NEW: go towards player NEXT: spawn at different furyTimes
 int Game::tick() const
 {
+    auto target = GetMousePosition();
+
+    DrawLine(player->posX, player->posY, target.x, target.y, RAYWHITE);
+
+
+    auto v2 = (Vector2){target.x - player->posX, target.y - player->posY};
+
+    DrawText(std::to_string(v2.x).c_str(), 1400, 10, 20, RED);
+    DrawText(std::to_string(v2.y).c_str(), 1400, 30, 20, RED);
+
+    player->direction = v2;
+
     for (auto  en = enemies->begin(); en != enemies->end(); en++)
     {
         if (en->hp > 0)

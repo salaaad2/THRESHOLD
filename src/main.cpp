@@ -69,18 +69,14 @@ int main(void) {
         }
         case (DEATH):
         {
-            std::string current;
-            if (game != nullptr)
-            {
-                current = game->getCurrent();
-                delete game;
-            }
+            if (IsKeyPressed(KEY_ENTER)) {
+                auto current = game->getCurrent();
 
-          if (IsKeyPressed(KEY_ENTER)) {
-            CloseAudioDevice();
-            game = new Game(current);
-            gs = GAMEPLAY;
-          }
+                delete game;
+                CloseAudioDevice();
+                game = new Game(current);
+                gs = GAMEPLAY;
+            }
             break ;
         }
         case (GAMEPLAY):
@@ -121,6 +117,7 @@ int main(void) {
 
     ClearBackground(COOLPURPLE);
 
+
     switch (gs) {
         case (TITLE):
         {
@@ -153,6 +150,7 @@ int main(void) {
             DrawCircle(SCREENWIDTH / 2, SCREENHEIGHT / 2, 200, BLACK);
             DrawText("YOU DIED", (SCREENWIDTH / 2) - 200, (SCREENHEIGHT / 2) - 50, 40, WHITE);
             DrawText(game->getCurrent().c_str(), (SCREENWIDTH / 2) - 100, (SCREENHEIGHT / 2) + 50, 40, WHITE);
+            break ;
         }
         case (GAMEPLAY):
         {
@@ -162,6 +160,7 @@ int main(void) {
                 else if (code == 2) // level end
                 {gs = NEXT;}
             }
+            BeginMode2D(game->cam);
             game->draw();
             break ;
         }
@@ -182,7 +181,6 @@ int main(void) {
     }
     EndDrawing();
   }
-    EndMode2D();
   CloseWindow();
   return 0;
 }

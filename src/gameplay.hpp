@@ -13,6 +13,7 @@
 #include "window.hpp"
 #include "entity.hpp"
 
+#include <raylib.h>
 #include <vector>
 #include <iostream>
 
@@ -34,9 +35,15 @@
 // TODO: boss textures
 
 #define COOLPURPLE CLITERAL(Color){ 170, 153, 255, 255 }    // cool Purple
-//rgb(170,153,255)
+
 class Game {
     int nEnemies; // number of enemies on given level
+    int nWaves; // number of waves in level
+    int nPerWave; // number of enemies per wave.
+
+    // NOTE : maps are assumed to be correct. tyhus, no
+    // checks are made to verify their integrity.
+    // having wrong maps can (and probably will) result in a crash
 
     std::vector<Entity> * enemies;
 
@@ -47,7 +54,6 @@ class Game {
     std::string next; // next level
     std::string current; // next level
 
-    Camera2D * camera;
 
     int frameWidth;
     int frameHeight;
@@ -60,12 +66,16 @@ class Game {
     Game(std::string const &path);
     ~Game();
 
+    Camera2D cam;
+
     void start() ;
-    void draw() const;
+    void draw() ;
     int tick() const;
     int getKeys() const;
     int shoot() const;
     int hit(Entity en, Vector2 add1, Vector2 add2) const ;
+
+    int getDiff(Vector2 pos, Vector2 tip, Vector2 target) const ;
 
     std::string const &getNext() const; // returns next level's string
     std::string const &getCurrent() const; // returns next level's string
