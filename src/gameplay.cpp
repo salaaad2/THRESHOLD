@@ -208,24 +208,36 @@ int Game::tick() const {
 }
 
 int Game::getKeys() const {
-    auto oldX = 0, oldY = 0;  // get position before processing keys to check
+    auto oldX = 0, oldY = 0, speed = 7;  // get position before processing keys to check
                               // for player movement in threshold mode
     oldX = player->posX;
     oldY = player->posY;
     if (IsKeyDown(KEY_W)) {
         player->posX += 0;
-        player->posY += -7;
+        if ((player->posY + speed) < 0)
+            player->posY = 0;
+        else
+            player->posY += -speed;
     }
     if (IsKeyDown(KEY_S)) {
         player->posX += 0;
-        player->posY += 7;
+        if ((player->posY + speed) > SCREENHEIGHT)
+            player->posY = SCREENHEIGHT;
+        else
+            player->posY += speed;
     }
     if (IsKeyDown(KEY_A)) {
-        player->posX += -7;
+        if ((player->posX - speed) < 0) // avoid leaving the map
+            player->posX = 0;
+        else
+            player->posX += -speed;
         player->posY += 0;
     }
     if (IsKeyDown(KEY_D)) {
-        player->posX += 7;
+        if ((player->posX + speed) > SCREENWIDTH)
+            player->posX = SCREENWIDTH;
+        else
+            player->posX += speed;
         player->posY += 0;
     }
     if (player->fury >= 5 && IsKeyDown(KEY_E)) {
