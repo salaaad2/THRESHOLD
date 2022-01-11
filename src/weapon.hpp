@@ -16,33 +16,32 @@
 class Entity;
 
 class AWeapon {
-protected:
-  Sound shot;
-  Sound reload;
+   protected:
+    Sound shot;
+    Sound reload;
 
-  unsigned int max;
+    unsigned int max;
 
-  double cooldown;
-  double t;
+    double cooldown;
+    double t;
 
+    float const range;
+    unsigned int const& damage;
 
-  float const range;
-  unsigned int const &damage;
-
-public:
+   public:
     AWeapon(float const rg,
-            unsigned int const &dmg,
-            unsigned int const & mag,
-            double const & cooldown,
-            const char *s,
-            const char *r);
-  ~AWeapon();
+            unsigned int const& dmg,
+            unsigned int const& mag,
+            double const& cooldown,
+            const char* s,
+            const char* r);
+    ~AWeapon();
 
-  virtual int bang(std::vector<Entity> * enemies, Entity * player) = 0;
-  void refill();
+    virtual int bang(std::vector<Entity>* enemies, Entity* player) = 0;
+    void refill();
 
-  bool empty;
-  unsigned int barrel;
+    bool empty;
+    unsigned int barrel;
 };
 
-#endif // WEAPON_H_
+#endif  // WEAPON_H_

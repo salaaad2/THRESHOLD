@@ -13,11 +13,16 @@
 
 int initWindow(void);
 
-#define SCREENWIDTH  1600
+#define SCREENWIDTH 1600
 #define SCREENHEIGHT 900
 
 typedef enum gameState {
-TITLE = 0, PICK, DEATH, GAMEPLAY, NEXT, ENDING
-} gameState ;
+    TITLE = 0,
+    PICK,
+    DEATH,
+    GAMEPLAY,
+    NEXT,
+    ENDING
+} gameState;
 
-#endif // WINDOW_H_
+#endif  // WINDOW_H_

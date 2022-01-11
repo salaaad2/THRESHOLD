@@ -9,21 +9,20 @@
 #ifndef GAMEPLAY_H_
 #define GAMEPLAY_H_
 
+#include "entity.hpp"
 #include "terrain.hpp"
 #include "window.hpp"
-#include "entity.hpp"
 
 #include <raylib.h>
-#include <vector>
 #include <iostream>
+#include <vector>
 
 // sound defines
-#define SHOTTY_BANG    "../meta/media/mp3/shotty_shoot.mp3"
-#define SHOTTY_RELOAD  "../meta/media/mp3/shotty_reload.mp3"
+#define SHOTTY_BANG "../meta/media/mp3/shotty_shoot.mp3"
+#define SHOTTY_RELOAD "../meta/media/mp3/shotty_reload.mp3"
 
-#define AR_BANG    "../meta/media/mp3/ar_shoot.mp3"
-#define AR_RELOAD  "../meta/media/mp3/shotty_reload.mp3"
-
+#define AR_BANG "../meta/media/mp3/ar_shoot.mp3"
+#define AR_RELOAD "../meta/media/mp3/shotty_reload.mp3"
 
 // player textures
 #define MUCHACHO_TEX "../meta/media/sprites/cowboy_idle.png"
@@ -34,26 +33,26 @@
 
 // TODO: boss textures
 
-#define COOLPURPLE CLITERAL(Color){ 170, 153, 255, 255 }    // cool Purple
+#define COOLPURPLE \
+    CLITERAL(Color) { 170, 153, 255, 255 }  // cool Purple
 
 class Game {
-    int nEnemies; // number of enemies on given level
-    int nWaves; // number of waves in level
-    int nPerWave; // number of enemies per wave.
+    int nEnemies;  // number of enemies on given level
+    int nWaves;    // number of waves in level
+    int nPerWave;  // number of enemies per wave.
 
     // NOTE : maps are assumed to be correct. therefore, no
     // checks are made to verify their integrity.
     // having wrong maps can (and probably will) result in a crash
 
-    std::vector<Entity> * enemies;
+    std::vector<Entity>* enemies;
 
-    std::vector<Terrain*> * terrain;
+    std::vector<Terrain*>* terrain;
 
-    Entity * player;
+    Entity* player;
 
-    std::string next; // next level
-    std::string current; // next level
-
+    std::string next;     // next level
+    std::string current;  // next level
 
     int frameWidth;
     int frameHeight;
@@ -62,21 +61,21 @@ class Game {
 
     Vector2 origin;
 
-  public:
-    Game(std::string const &path);
+   public:
+    Game(std::string const& path);
     ~Game();
 
     Camera2D cam;
 
-    void start() ;
-    void draw() ;
+    void start();
+    void draw();
     int tick() const;
     int getKeys() const;
     int shoot() const;
-    int hit(Entity en, Vector2 add1, Vector2 add2) const ;
+    int hit(Entity en, Vector2 add1, Vector2 add2) const;
 
-    std::string const &getNext() const; // returns next level's string
-    std::string const &getCurrent() const; // returns next level's string
+    std::string const& getNext() const;     // returns next level's string
+    std::string const& getCurrent() const;  // returns next level's string
 };
 
-#endif // GAMEPLAY_H_
+#endif  // GAMEPLAY_H_

@@ -1,22 +1,16 @@
 #include "wp_shotty.hpp"
 
-#include <iostream>
-#include <raymath.h>
 #include <raylib.h>
+#include <raymath.h>
+#include <iostream>
 
 #include "entity.hpp"
 
-wp_shotty::wp_shotty(const char *s, const char *r)
-    : AWeapon(100.0f, 10, 10, 0.5, s, r)
-{}
+wp_shotty::wp_shotty(const char* s, const char* r)
+    : AWeapon(100.0f, 10, 10, 0.5, s, r) {}
 
-
-
-int wp_shotty::bang(std::vector<Entity> * enemies, Entity * player)
-{
-    if (barrel == 0 ||
-        GetTime() < (t + cooldown))
-    {
+int wp_shotty::bang(std::vector<Entity>* enemies, Entity* player) {
+    if (barrel == 0 || GetTime() < (t + cooldown)) {
         return (1);
     } else {
         Vector2 playerDirection = Vector2Normalize(player->direction);
@@ -39,16 +33,19 @@ int wp_shotty::bang(std::vector<Entity> * enemies, Entity * player)
         r.x *= 2;
         r.y *= 2;
 
-        for (auto en = enemies->begin(); en != enemies->end(); en++)
-        {
-            if (CheckCollisionPointLine((Vector2){en->posX, en->posY}, playerPosition, add1, (en->radius * 2)) ||
-                CheckCollisionPointLine((Vector2){en->posX, en->posY}, playerPosition, Vector2Add(playerPosition, r), (en->radius * 2)) ||
-                CheckCollisionPointLine((Vector2){en->posX, en->posY}, playerPosition, add2, (en->radius * 2)))
-            { // enemy hit
+        for (auto en = enemies->begin(); en != enemies->end(); en++) {
+            if (CheckCollisionPointLine((Vector2){en->posX, en->posY},
+                                        playerPosition, add1,
+                                        (en->radius * 2)) ||
+                CheckCollisionPointLine(
+                    (Vector2){en->posX, en->posY}, playerPosition,
+                    Vector2Add(playerPosition, r), (en->radius * 2)) ||
+                CheckCollisionPointLine((Vector2){en->posX, en->posY},
+                                        playerPosition, add2,
+                                        (en->radius * 2))) {  // enemy hit
                 std::cout << "hit" << std::endl;
                 en->hp--;
-                if (en->hp == 0)
-                {
+                if (en->hp == 0) {
                     en->direction.x = (playerDirection.x / 2);
                     en->direction.y = (playerDirection.y / 2);
                     player->victims += 1;
@@ -58,16 +55,12 @@ int wp_shotty::bang(std::vector<Entity> * enemies, Entity * player)
         }
         // shotty cone
         DrawLineEx(playerPosition, add1, 10, ORANGE);
-        DrawLineEx(playerPosition,
-                   Vector2Add(playerPosition,
-                              r),
-                   10, ORANGE);
+        DrawLineEx(playerPosition, Vector2Add(playerPosition, r), 10, ORANGE);
         DrawLineEx(playerPosition, add2, 10, ORANGE);
 
         //
         // there
-        if (barrel == 0)
-        {
+        if (barrel == 0) {
             empty = true;
         }
         return (0);

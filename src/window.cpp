@@ -8,8 +8,7 @@
 
 #include "window.hpp"
 
-int
-initWindow(void) {
+int initWindow(void) {
     // Initialization
     SetTargetFPS(60);
 

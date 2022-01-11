@@ -12,12 +12,11 @@
 #include "weapon.hpp"
 
 class wp_shotty : public AWeapon {
-    public:
-        wp_shotty(const char *s, const char *r);
-        ~wp_shotty();
+   public:
+    wp_shotty(const char* s, const char* r);
+    ~wp_shotty();
 
-        int bang(std::vector<Entity> * enemies, Entity * player) ;
+    int bang(std::vector<Entity>* enemies, Entity* player);
 };
-
 
 #endif
