@@ -69,8 +69,8 @@ class Game {
 
     void start();
     void draw();
-    int tick() const;
-    int getKeys() const;
+    int tick() ;
+    int getKeys() ;
     int shoot() const;
     int hit(Entity en, Vector2 add1, Vector2 add2) const;
 
