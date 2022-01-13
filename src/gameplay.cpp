@@ -215,6 +215,10 @@ int Game::tick() {
                 en->posY += 2.1f;
                 en->direction.y += 0.1f;
             }
+            // if ((GetRandomValue(0, 100) == 50) && (en->currentWeapon != nullptr)) {
+            //     std::cout << "spawn enemy" << std::endl;
+            //     en->currentWeapon->bang(enemies, &(*en));
+            // }
         } else {
             if (en->posX >= SCREENWIDTH || en->posX <= 0 ||
                 en->posY >= SCREENHEIGHT) {

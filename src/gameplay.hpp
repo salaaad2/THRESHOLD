@@ -34,10 +34,14 @@
 #define SBIRE_TEX_IDLE "../meta/media/sprites/sbire_idle.png"
 #define SBIRE_TEX_HURT "../meta/media/sprites/sbire_hurt.png"
 
+#define BACKGROUND_TEX "../meta/media/sprites/background.png"
+
 // TODO: boss textures
 
 #define COOLPURPLE \
     CLITERAL(Color) { 170, 153, 255, 255 }  // cool Purple
+// #define COOLPURPLE \
+//     CLITERAL(Color) { 153, 0, 0, 255 }  // cool Purple
 
 class Game {
     int nEnemies;  // number of enemies on given level
@@ -65,6 +69,7 @@ class Game {
     Vector2 origin;
 
     Texture2D crosshair;
+    // Texture2D background;
 
    public:
     Game(std::string const& path);

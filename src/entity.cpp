@@ -16,25 +16,25 @@ Entity::Entity(int const& h) : hp(h) {
     switch (dir) {
         case (0): {
             posX =
-                GetRandomValue((SCREENWIDTH / 2) - 30, (SCREENWIDTH / 2) + 30);
+                GetRandomValue((SCREENWIDTH / 2) - 300, (SCREENWIDTH / 2) + 300);
             posY = GetRandomValue(0, 40);
             break;
         }
         case (1): {
-            posX = GetRandomValue(SCREENWIDTH - 20, SCREENWIDTH + 20);
-            posY = GetRandomValue((SCREENHEIGHT / 2) - 30,
-                                  (SCREENHEIGHT / 2) + 30);
+            posX = GetRandomValue(SCREENWIDTH - 200, SCREENWIDTH + 200);
+            posY = GetRandomValue((SCREENHEIGHT / 2) - 300,
+                                  (SCREENHEIGHT / 2) + 300);
             break;
         }
         case (2): {
             posX =
-                GetRandomValue((SCREENWIDTH / 2) - 30, (SCREENWIDTH / 2) + 30);
-            posY = GetRandomValue(SCREENHEIGHT - 20, SCREENHEIGHT + 20);
+                GetRandomValue((SCREENWIDTH / 2) - 300, (SCREENWIDTH / 2) + 300);
+            posY = GetRandomValue(SCREENHEIGHT - 200, SCREENHEIGHT + 200);
             break;
         }
         case (3): {
-            posX = GetRandomValue(SCREENWIDTH - 20, SCREENWIDTH + 20);
-            posY = GetRandomValue((SCREENHEIGHT / 2), (SCREENHEIGHT / 2) + 10);
+            posX = GetRandomValue(SCREENWIDTH - 200, SCREENWIDTH + 200);
+            posY = GetRandomValue((SCREENHEIGHT / 2), (SCREENHEIGHT / 2) + 100);
             break;
         }
     }
