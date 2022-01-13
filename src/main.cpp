@@ -25,6 +25,8 @@ int main(void) {
 
     Game* game = nullptr;
 
+
+    Texture2D background = LoadTexture("../meta/media/sprites/background.png");
     std::string path = "../meta/maps";
     int i = 0;
     for (const auto& entry :
@@ -103,10 +105,11 @@ int main(void) {
         }
         BeginDrawing();
 
-        ClearBackground(COOLPURPLE);
+        // ClearBackground(COOLPURPLE);
 
         switch (gs) {
             case (TITLE): {
+                ClearBackground(COOLPURPLE);
                 DrawRectangle(200, 100, 1200, 700, RAYWHITE);
                 DrawRectangle(250, 150, 1100, 600, COOLPURPLE);
                 DrawText("THRESHOLD", 260, 160, 30, RAYWHITE);
@@ -116,6 +119,7 @@ int main(void) {
                 break;
             }
             case (PICK): {
+                ClearBackground(COOLPURPLE);
                 DrawRectangle(200, 100, 1200, 700, RAYWHITE);
                 DrawRectangle(250, 150, 1100, 600, COOLPURPLE);
                 DrawRectangle(300, 200, 1000, 500, RAYWHITE);
@@ -139,6 +143,7 @@ int main(void) {
                 break;
             }
             case (GAMEPLAY): {
+                DrawTexture(background, 0, 0, WHITE);
                 if (auto code = game->getKeys()) {
                     if (code == 1)  // death
                     {

@@ -57,6 +57,7 @@ Game::Game(std::string const& path) : current(path) {
     }
     ifs.close();
     enemies = new std::vector<Entity>;
+    InitAudioDevice();
 
     AWeapon* shotty = new wp_shotty(SHOTTY_BANG,
                                     SHOTTY_RELOAD
@@ -94,7 +95,6 @@ Game::Game(std::string const& path) : current(path) {
     player->radius = 10;
     player->victims = 0;
     player->fury = 0;
-    InitAudioDevice();
 
     crosshair = LoadTexture(CROSSHAIR_TEX);
 
@@ -108,6 +108,7 @@ Game::Game(std::string const& path) : current(path) {
     player->currentWeapon = player->wp[0];
     player->idleTex = LoadTexture(MUCHACHO_TEX);
 }
+
 
 Game::~Game() {
     delete enemies;
@@ -132,7 +133,7 @@ void Game::draw() {
 
     cam.target.x = player->posX;
     EndMode2D();
-    auto texSize = (enemies->at(0).radius / 40.0f);
+
     for (auto& en : *enemies) {
         DrawCircle(en.posX, en.posY, en.radius, GREEN);
         if (en.hp == 0)

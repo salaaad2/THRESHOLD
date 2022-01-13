@@ -38,10 +38,10 @@
 
 // TODO: boss textures
 
-#define COOLPURPLE \
-    CLITERAL(Color) { 170, 153, 255, 255 }  // cool Purple
 // #define COOLPURPLE \
-//     CLITERAL(Color) { 153, 0, 0, 255 }  // cool Purple
+//     CLITERAL(Color) { 170, 153, 255, 255 }  // cool Purple
+#define COOLPURPLE \
+     CLITERAL(Color) { 153, 0, 0, 255 }  // cool Purple
 
 class Game {
     int nEnemies;  // number of enemies on given level
@@ -53,8 +53,6 @@ class Game {
     // having wrong maps can (and probably will) result in a crash
 
     std::vector<Entity>* enemies;
-
-    std::vector<Terrain*>* terrain;
 
     Entity* player;
 
@@ -69,7 +67,7 @@ class Game {
     Vector2 origin;
 
     Texture2D crosshair;
-    // Texture2D background;
+
 
    public:
     Game(std::string const& path);
