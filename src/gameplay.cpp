@@ -18,6 +18,7 @@
 #include "window.hpp"
 #include "wp_assaultrifle.hpp"
 #include "wp_shotty.hpp"
+#include "wp_enemyslingshot.hpp"
 
 Game::Game(std::string const& path) : current(path) {
     std::ifstream ifs(path);
@@ -56,19 +57,33 @@ Game::Game(std::string const& path) : current(path) {
     }
     ifs.close();
     enemies = new std::vector<Entity>;
+
+    AWeapon* shotty = new wp_shotty(SHOTTY_BANG,
+                                    SHOTTY_RELOAD
+    );
+    AWeapon* ar = new wp_assaultrifle(AR_BANG,
+                                      SHOTTY_RELOAD  // TODO: get sound
+    );
+    AWeapon* sling = new wp_enemysling(SHOTTY_BANG,
+                                       SHOTTY_RELOAD
+    );
+
     for (auto i = 0; i < nPerWave; i++) {
         if (ehp == 0) {
-            Entity en(ehp);
+            Entity en(1);
             en.radius = radius;
             en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
             en.hurtTex = LoadTexture(SBIRE_TEX_HURT);
             enemies->push_back(en);
+            en.currentWeapon = nullptr;
         } else {
             Entity en(ehp);
             en.radius = radius;
+            en.wp[0] = shotty;
+            en.currentWeapon = en.wp[0];
             en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
             en.hurtTex = LoadTexture(SBIRE_TEX_HURT);
-            enemies->push_back(en);  // legacy code. TODO: remove
+            enemies->push_back(en);  // legacy code. TODO: remove AKchually no
         }
     }
     player = new Entity;
@@ -81,14 +96,12 @@ Game::Game(std::string const& path) : current(path) {
     player->fury = 0;
     InitAudioDevice();
 
+    crosshair = LoadTexture(CROSSHAIR_TEX);
+
     cam.target = (Vector2){player->posX, player->posY};
     cam.offset = (Vector2){SCREENWIDTH / 2.0f, SCREENHEIGHT / 2.0f};
     cam.rotation = 0.0f;
     cam.zoom = 1.0f;
-    AWeapon* shotty = new wp_shotty(SHOTTY_BANG, SHOTTY_RELOAD);
-    AWeapon* ar = new wp_assaultrifle(AR_BANG,
-                                      SHOTTY_RELOAD  // TODO: get sound
-    );
 
     player->wp[0] = shotty;
     player->wp[1] = ar;
@@ -130,7 +143,7 @@ void Game::draw() {
                           1.0f, 0.6f, WHITE);
         }
     }
-    // Destination rectangle (screen rectangle where drawing part of texture)
+    // Destination rectangle
     Rectangle destRec = {player->posX, player->posY, frameWidth * 1.8f,
                          frameHeight * 1.8f};
 
@@ -155,7 +168,7 @@ void Game::draw() {
 int Game::tick() {
     auto target = GetMousePosition();
 
-    DrawLine(player->posX, player->posY, target.x, target.y, RAYWHITE);
+    DrawTexture(crosshair, target.x, target.y, WHITE);
 
     auto v2 = (Vector2){target.x - player->posX, target.y - player->posY};
 
@@ -221,7 +234,7 @@ int Game::tick() {
     return (0);
 }
 
-int Game::getKeys() const {
+int Game::getKeys() {
     auto oldX = 0, oldY = 0, speed = 7;  // get position before processing keys to check
                               // for player movement in threshold mode
     oldX = player->posX;

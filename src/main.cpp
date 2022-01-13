@@ -28,7 +28,7 @@ int main(void) {
     std::string path = "../meta/maps";
     int i = 0;
     for (const auto& entry :
-         std::filesystem::directory_iterator(path)) {  // c++17 lol
+         std::filesystem::directory_iterator(path)) {  // NOTE: c++17 lol
         if (entry.path().filename().generic_string().find("start") !=
             std::string::npos) {
             pick[i] = entry.path().filename().generic_string();

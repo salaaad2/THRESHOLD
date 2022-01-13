@@ -27,6 +27,9 @@
 // player textures
 #define MUCHACHO_TEX "../meta/media/sprites/cowboy_idle.png"
 
+// crosshair
+#define CROSSHAIR_TEX "../meta/media/sprites/crosshair.png"
+
 // bad boy textures
 #define SBIRE_TEX_IDLE "../meta/media/sprites/sbire_idle.png"
 #define SBIRE_TEX_HURT "../meta/media/sprites/sbire_hurt.png"
@@ -60,6 +63,8 @@ class Game {
     Rectangle sourceRec;
 
     Vector2 origin;
+
+    Texture2D crosshair;
 
    public:
     Game(std::string const& path);
