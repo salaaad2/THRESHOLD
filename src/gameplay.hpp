@@ -74,8 +74,6 @@ class Game {
     Game(std::string const& path);
     ~Game();
 
-    Camera2D cam;
-
     void start();
     void draw();
     int tick() ;
@@ -86,6 +84,7 @@ class Game {
     std::string const& getNext() const;     // returns next level's string
     std::string const& getCurrent() const;  // returns next level's string
     std::string const& getBackground() const;  // returns next level's string
+    int const& getKills() const;  // returns next level's string
 };
 
 #endif  // GAMEPLAY_H_

@@ -8,6 +8,7 @@
 
 #include <raylib.h>  // basic libs
 #include <iostream>
+#include <fstream>
 #include "gameplay.hpp"
 #include "window.hpp"
 
@@ -24,6 +25,7 @@ int main(void) {
     auto nPick = 0;
     Texture2D background;
     Game* game = nullptr;
+    std::ofstream ifs("../meta/maps/savestate");
 
 
     std::string path = "../meta/maps";
@@ -81,6 +83,7 @@ int main(void) {
                 if (IsKeyPressed(KEY_ENTER)) {
                     std::string next("../meta/maps/");
                     next += game->getNext();
+                    ifs << game->getCurrent() ;
 
                     delete game;
                     CloseAudioDevice();
@@ -153,17 +156,23 @@ int main(void) {
                         gs = NEXT;
                     }
                 }
-                BeginMode2D(game->cam);
+                // BeginMode2D(game->cam); // I think this might be useless
+                // NOTE: it was lol
                 game->draw();
                 break;
             }
             case (NEXT): {
-                DrawCircle(SCREENWIDTH / 2, SCREENHEIGHT / 2, 200, BLACK);
-                DrawText("STAGE CLEARED\nNEXT LEVEL :",
-                         (SCREENWIDTH / 2) - 200, 200, 40,
-                         WHITE);
-                DrawText(game->getNext().c_str(), (SCREENWIDTH / 2) - 100,
-                         (SCREENHEIGHT / 2) + 60, 40, WHITE);
+                ClearBackground(COOLPURPLE);
+                DrawRectangle(200, 100, 1200, 700, RAYWHITE);
+                DrawRectangle(250, 150, 1100, 600, COOLPURPLE);
+                DrawRectangle(300, 200, 1000, 500, RAYWHITE);
+                DrawText("THRESHOLD", 260, 160, 30, RAYWHITE);
+                DrawText("CONGRATULATIONS\n", 350, 240, 30, COOLPURPLE);
+                DrawText("KILLS :", 350, 280, 30, COOLPURPLE);
+                auto kills = std::to_string(game->getKills()).c_str();
+                DrawText(kills, 460, 280, 30, RED);
+                DrawText("TIME\n", 350, 320, 30, COOLPURPLE);
+
                 break;
             }
             case (ENDING): {
@@ -175,6 +184,7 @@ int main(void) {
         }
         EndDrawing();
     }
+    ifs.close();
     CloseWindow();
     return 0;
 }

@@ -2,3 +2,4 @@ BOSS 0 0
 ENEMIES 15 20
 WAVES 1 15
 NEXT stage_1_boss.bfm
+BACKGROUND ../meta/media/sprites/stage_1_regbg.png

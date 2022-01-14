@@ -102,11 +102,6 @@ Game::Game(std::string const& path) : current(path) {
 
     crosshair = LoadTexture(CROSSHAIR_TEX);
 
-    cam.target = (Vector2){player->posX, player->posY};
-    cam.offset = (Vector2){SCREENWIDTH / 2.0f, SCREENHEIGHT / 2.0f};
-    cam.rotation = 0.0f;
-    cam.zoom = 1.0f;
-
     player->wp[0] = shotty;
     player->wp[1] = ar;
     player->currentWeapon = player->wp[0];
@@ -135,11 +130,8 @@ void Game::start() {
 void Game::draw() {
     auto left = std::to_string(enemies->size());
 
-    cam.target.x = player->posX;
-    EndMode2D();
 
     for (auto& en : *enemies) {
-        DrawCircle(en.posX, en.posY, en.radius, GREEN);
         if (en.hp == 0)
             DrawTextureEx(en.hurtTex, (Vector2){en.posX - 20, en.posY - 20},
                           1.0f, 0.6f, WHITE);
@@ -341,4 +333,8 @@ std::string const& Game::getCurrent() const {
 
 std::string const& Game::getBackground() const {
     return background;
+}
+
+int const& Game::getKills() const {
+    return player->victims;
 }
