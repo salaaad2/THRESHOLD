@@ -58,6 +58,7 @@ class Game {
 
     std::string next;     // next level
     std::string current;  // next level
+    std::string background;  // next level
 
     int frameWidth;
     int frameHeight;
@@ -84,6 +85,7 @@ class Game {
 
     std::string const& getNext() const;     // returns next level's string
     std::string const& getCurrent() const;  // returns next level's string
+    std::string const& getBackground() const;  // returns next level's string
 };
 
 #endif  // GAMEPLAY_H_

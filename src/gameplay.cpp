@@ -54,6 +54,10 @@ Game::Game(std::string const& path) : current(path) {
             ifs >> tok;
             nPerWave = std::atoi(tok.c_str());
         }
+        if (tok == "BACKGROUND") {
+            ifs >> tok;
+            background = tok;
+        }
     }
     ifs.close();
     enemies = new std::vector<Entity>;
@@ -333,4 +337,8 @@ std::string const& Game::getNext() const {
 
 std::string const& Game::getCurrent() const {
     return current;
+}
+
+std::string const& Game::getBackground() const {
+    return background;
 }

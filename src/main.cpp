@@ -22,11 +22,10 @@ int main(void) {
     initWindow();
     InitWindow(SCREENWIDTH, SCREENHEIGHT, "WIP -- muchashooter THRESHOLD");
     auto nPick = 0;
-
+    Texture2D background;
     Game* game = nullptr;
 
 
-    Texture2D background = LoadTexture("../meta/media/sprites/background.png");
     std::string path = "../meta/maps";
     int i = 0;
     for (const auto& entry :
@@ -53,6 +52,7 @@ int main(void) {
                     s += "/";
                     s += pick[nPick];
                     game = new Game(s);
+                    background = LoadTexture(game->getBackground().c_str());
                     gs = GAMEPLAY;
                     game->start();
                 }
@@ -158,10 +158,9 @@ int main(void) {
                 break;
             }
             case (NEXT): {
-                ClearBackground(COOLPURPLE);
                 DrawCircle(SCREENWIDTH / 2, SCREENHEIGHT / 2, 200, BLACK);
-                DrawText("STAGE CLEARED\nNEXT LEVEL :\n",
-                         (SCREENWIDTH / 2) - 200, (SCREENHEIGHT / 2) - 50, 40,
+                DrawText("STAGE CLEARED\nNEXT LEVEL :",
+                         (SCREENWIDTH / 2) - 200, 200, 40,
                          WHITE);
                 DrawText(game->getNext().c_str(), (SCREENWIDTH / 2) - 100,
                          (SCREENHEIGHT / 2) + 60, 40, WHITE);
