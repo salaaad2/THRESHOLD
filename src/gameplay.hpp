@@ -42,7 +42,7 @@
 // #define COOLPURPLE \
 //     CLITERAL(Color) { 170, 153, 255, 255 }  // cool Purple
 #define COOLPURPLE \
-     CLITERAL(Color) { 153, 0, 0, 255 }  // cool Purple
+    CLITERAL(Color) { 153, 0, 0, 255 }  // cool Purple
 
 class Game {
     int nEnemies;  // number of enemies on given level
@@ -57,8 +57,8 @@ class Game {
 
     Entity* player;
 
-    std::string next;     // next level
-    std::string current;  // next level
+    std::string next;        // next level
+    std::string current;     // next level
     std::string background;  // next level
 
     int frameWidth;
@@ -70,22 +70,21 @@ class Game {
 
     Texture2D crosshair;
 
-
    public:
     Game(std::string const& path);
     ~Game();
 
     void start();
     void draw();
-    int tick() ;
-    int getKeys() ;
+    int tick();
+    int getKeys();
     int shoot() const;
     int hit(Entity en, Vector2 add1, Vector2 add2) const;
 
-    std::string const& getNext() const;     // returns next level's string
-    std::string const& getCurrent() const;  // returns next level's string
+    std::string const& getNext() const;        // returns next level's string
+    std::string const& getCurrent() const;     // returns next level's string
     std::string const& getBackground() const;  // returns next level's string
-    int const& getKills() const;  // returns next level's string
+    int const& getKills() const;               // returns next level's string
 };
 
 #endif  // GAMEPLAY_H_

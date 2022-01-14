@@ -17,8 +17,8 @@
 #include "weapon.hpp"
 #include "window.hpp"
 #include "wp_assaultrifle.hpp"
-#include "wp_shotty.hpp"
 #include "wp_enemyslingshot.hpp"
+#include "wp_shotty.hpp"
 
 Game::Game(std::string const& path) : current(path) {
     std::ifstream ifs(path);
@@ -63,15 +63,11 @@ Game::Game(std::string const& path) : current(path) {
     enemies = new std::vector<Entity>;
     InitAudioDevice();
 
-    AWeapon* shotty = new wp_shotty(SHOTTY_BANG,
-                                    SHOTTY_RELOAD
-    );
+    AWeapon* shotty = new wp_shotty(SHOTTY_BANG, SHOTTY_RELOAD);
     AWeapon* ar = new wp_assaultrifle(AR_BANG,
-                                      SHOTTY_RELOAD  // TODO: get sound
+                                      SHOTTY_RELOAD
     );
-    AWeapon* sling = new wp_enemysling(SHOTTY_BANG,
-                                       SHOTTY_RELOAD
-    );
+    AWeapon* sling = new wp_enemysling(SHOTTY_BANG, SHOTTY_RELOAD);
 
     for (auto i = 0; i < nPerWave; i++) {
         if (ehp == 1) {
@@ -79,12 +75,12 @@ Game::Game(std::string const& path) : current(path) {
             en.radius = radius;
             en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
             en.hurtTex = LoadTexture(SBIRE_TEX_HURT);
-            enemies->push_back(en);
             en.currentWeapon = nullptr;
+            enemies->push_back(en);
         } else {
             Entity en(ehp);
             en.radius = radius;
-            en.wp[0] = shotty;
+            en.wp[0] = sling;
             en.currentWeapon = en.wp[0];
             en.idleTex = LoadTexture(BOSS_TEX_IDLE);
             en.hurtTex = LoadTexture(BOSS_TEX_HURT);
@@ -108,7 +104,6 @@ Game::Game(std::string const& path) : current(path) {
     player->idleTex = LoadTexture(MUCHACHO_TEX);
 }
 
-
 Game::~Game() {
     delete enemies;
     delete player;
@@ -130,13 +125,14 @@ void Game::start() {
 void Game::draw() {
     auto left = std::to_string(enemies->size());
 
-
     for (auto& en : *enemies) {
         if (en.hp == 0)
-            DrawTextureEx(en.hurtTex, (Vector2){en.posX - en.radius, en.posY - en.radius},
+            DrawTextureEx(en.hurtTex,
+                          (Vector2){en.posX - en.radius, en.posY - en.radius},
                           1.0f, 0.6f, WHITE);
         else {
-            DrawTextureEx(en.idleTex, (Vector2){en.posX - en.radius, en.posY - en.radius},
+            DrawTextureEx(en.idleTex,
+                          (Vector2){en.posX - en.radius, en.posY - en.radius},
                           1.0f, 0.6f, WHITE);
         }
     }
@@ -155,13 +151,14 @@ void Game::draw() {
     if (player->fury >= 5) {
         DrawText("[E] FURY", SCREENWIDTH - 300, 10, 50, RED);
     }
-    for (auto i = 0; i < player->currentWeapon->barrel; i++) {
+    for (auto i = 0; i < player->currentWeapon->barrel; i++) { // draw weapon ammo
         DrawRectangle(40 + (i * 20), SCREENHEIGHT - 60, 10, 30, RED);
     }
-    if (enemies->at(0).hp >= 2) {
+    if (enemies->at(0).hp >= 2) { // draw hp in boss stages
         for (auto i = 0; i < enemies->size(); i++) {
             for (auto j = 0; j < enemies->at(i).hp; j++) {
-                DrawRectangle(400 + (j * 40), 80 + (i * 40), 40, 30, COOLPURPLE);
+                DrawRectangle(400 + (j * 40), 80 + (i * 40), 40, 30,
+                              COOLPURPLE);
             }
         }
     }
@@ -183,11 +180,12 @@ int Game::tick() {
 
     if (player->victims == nPerWave && nWaves > 1) {
         nWaves--;
-        for (int i = 0 ; i < nPerWave; i++) {
+        for (int i = 0; i < nPerWave; i++) {
             Entity en(1);
             en.radius = 20;
             en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
             en.hurtTex = LoadTexture(SBIRE_TEX_HURT);
+            en.currentWeapon = nullptr;
             enemies->push_back(en);
         }
     }
@@ -216,10 +214,11 @@ int Game::tick() {
                 en->posY += 2.1f;
                 en->direction.y += 0.1f;
             }
-            // if ((GetRandomValue(0, 100) == 50) && (en->currentWeapon != nullptr)) {
-            //     std::cout << "spawn enemy" << std::endl;
-            //     en->currentWeapon->bang(enemies, &(*en));
-            // }
+            if ((GetRandomValue(0, 100) == 50) && (en->currentWeapon !=
+            nullptr)) {
+                std::cout << "spawn enemy" << std::endl;
+                en->currentWeapon->bang(enemies, &(*en));
+            }
         } else {
             if (en->posX >= SCREENWIDTH || en->posX <= 0 ||
                 en->posY >= SCREENHEIGHT) {
@@ -240,8 +239,9 @@ int Game::tick() {
 }
 
 int Game::getKeys() {
-    auto oldX = 0, oldY = 0, speed = 7;  // get position before processing keys to check
-                              // for player movement in threshold mode
+    auto oldX = 0, oldY = 0,
+         speed = 7;  // get position before processing keys to check
+                     // for player movement in threshold mode
     oldX = player->posX;
     oldY = player->posY;
     if (IsKeyDown(KEY_W)) {
@@ -259,7 +259,7 @@ int Game::getKeys() {
             player->posY += speed;
     }
     if (IsKeyDown(KEY_A)) {
-        if ((player->posX - speed) < 0) // avoid leaving the map
+        if ((player->posX - speed) < 0)  // avoid leaving the map
             player->posX = 0;
         else
             player->posX += -speed;

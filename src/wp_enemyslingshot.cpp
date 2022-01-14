@@ -4,11 +4,11 @@
 #include <raymath.h>
 #include <iostream>
 
-#include "gameplay.hpp"
 #include "entity.hpp"
+#include "gameplay.hpp"
 
 wp_enemysling::wp_enemysling(const char* s, const char* r)
-    : AWeapon(300.0f, 10, 2, 0.0, s, r) {}
+    : AWeapon(300.0f, 10, 1, 0.0, s, r, "sling") {}
 
 int wp_enemysling::bang(std::vector<Entity>* enemies, Entity* baddie) {
     if (barrel == 0) {
@@ -21,9 +21,9 @@ int wp_enemysling::bang(std::vector<Entity>* enemies, Entity* baddie) {
         // it's a slingshot
         //
         Entity en(1);
-        en.posX = (baddie->posX += range);
-        en.posY = (baddie->posY += range);
-        en.direction = baddie->direction;
+        en.posX = 0;
+        en.posY = 0;
+        en.direction = (Vector2){1.0f, 1.0f};
         en.radius = 20;
         en.currentWeapon = nullptr;
         en.idleTex = LoadTexture(SBIRE_TEX_IDLE);

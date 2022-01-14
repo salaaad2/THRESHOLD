@@ -7,7 +7,7 @@
 #include "entity.hpp"
 
 wp_shotty::wp_shotty(const char* s, const char* r)
-    : AWeapon(100.0f, 10, 10, 0.5, s, r) {}
+    : AWeapon(100.0f, 10, 10, 0.5, s, r, "shotty") {}
 
 int wp_shotty::bang(std::vector<Entity>* enemies, Entity* player) {
     if (barrel == 0 || GetTime() < (t + cooldown)) {

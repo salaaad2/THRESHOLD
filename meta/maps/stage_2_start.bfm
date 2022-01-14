@@ -1,3 +1,5 @@
-BOSS 0 0
-ENEMIES 10 20
-NEXT stage_1_1.bfm
+BOSS 1 10
+ENEMIES 2 100
+WAVES 1 2
+NEXT stage_1_boss.bfm
+BACKGROUND ../meta/media/sprites/stage_1_bossbg.png

@@ -12,6 +12,7 @@
 #include "raylib.h"
 
 #include <vector>
+#include <iostream>
 
 class Entity;
 
@@ -27,14 +28,16 @@ class AWeapon {
 
     float const range;
     unsigned int const& damage;
+    const std::string name;
 
    public:
-    AWeapon(float const rg,
-            unsigned int const& dmg,
-            unsigned int const& mag,
-            double const& cooldown,
-            const char* s,
-            const char* r);
+    AWeapon(float const rg, // range
+            unsigned int const& dmg, // damage
+            unsigned int const& mag, // mag capacity
+            double const& cooldown, // duh
+            const char* s, // shot sound  path
+            const char* r, // reload sound path
+            std::string const & nm); // name
     ~AWeapon();
 
     virtual int bang(std::vector<Entity>* enemies, Entity* player) = 0;

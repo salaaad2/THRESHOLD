@@ -7,8 +7,8 @@
 /*********************************/
 
 #include <raylib.h>  // basic libs
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include "gameplay.hpp"
 #include "window.hpp"
 
@@ -26,7 +26,6 @@ int main(void) {
     Texture2D background;
     Game* game = nullptr;
     std::ofstream ifs("../meta/maps/savestate");
-
 
     std::string path = "../meta/maps";
     int i = 0;
@@ -83,7 +82,7 @@ int main(void) {
                 if (IsKeyPressed(KEY_ENTER)) {
                     std::string next("../meta/maps/");
                     next += game->getNext();
-                    ifs << game->getCurrent() ;
+                    ifs << game->getCurrent();
 
                     delete game;
                     CloseAudioDevice();
@@ -169,9 +168,11 @@ int main(void) {
                 DrawText("THRESHOLD", 260, 160, 30, RAYWHITE);
                 DrawText("CONGRATULATIONS\n", 350, 240, 30, COOLPURPLE);
                 DrawText("KILLS :", 350, 280, 30, COOLPURPLE);
-                auto kills = std::to_string(game->getKills()).c_str();
-                DrawText(kills, 460, 280, 30, RED);
-                DrawText("TIME\n", 350, 320, 30, COOLPURPLE);
+                auto kills = std::to_string(game->getKills());
+                DrawText(kills.c_str(), 460, 280, 30, RED);
+                DrawText("NEXT LEVEL :\n", 350, 360, 30, COOLPURPLE);
+                auto next = game->getNext();
+                DrawText(next.c_str(), 460, 400, 30, RED);
 
                 break;
             }
