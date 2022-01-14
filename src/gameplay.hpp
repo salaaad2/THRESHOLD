@@ -34,9 +34,10 @@
 #define SBIRE_TEX_IDLE "../meta/media/sprites/sbire_idle.png"
 #define SBIRE_TEX_HURT "../meta/media/sprites/sbire_hurt.png"
 
-#define BACKGROUND_TEX "../meta/media/sprites/background.png"
-
-// TODO: boss textures
+// boss textures
+#define BOSS_TEX_IDLE "../meta/media/sprites/boss_idle.png"
+#define BOSS_TEX_HURT "../meta/media/sprites/boss_hurt.png"
+#define BOSS_TEX_DEAD "../meta/media/sprites/boss_hurt.png"
 
 // #define COOLPURPLE \
 //     CLITERAL(Color) { 170, 153, 255, 255 }  // cool Purple

@@ -1,5 +1,5 @@
 BOSS 0 0
-ENEMIES 10 20
-WAVES 2 5
+ENEMIES 20 20
+WAVES 4 5
 NEXT stage_1_1.bfm
 BACKGROUND ../meta/media/sprites/stage_1_regbg.png

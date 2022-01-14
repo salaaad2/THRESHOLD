@@ -74,8 +74,8 @@ Game::Game(std::string const& path) : current(path) {
     );
 
     for (auto i = 0; i < nPerWave; i++) {
-        if (ehp == 0) {
-            Entity en(1);
+        if (ehp == 1) {
+            Entity en(ehp);
             en.radius = radius;
             en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
             en.hurtTex = LoadTexture(SBIRE_TEX_HURT);
@@ -86,8 +86,8 @@ Game::Game(std::string const& path) : current(path) {
             en.radius = radius;
             en.wp[0] = shotty;
             en.currentWeapon = en.wp[0];
-            en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
-            en.hurtTex = LoadTexture(SBIRE_TEX_HURT);
+            en.idleTex = LoadTexture(BOSS_TEX_IDLE);
+            en.hurtTex = LoadTexture(BOSS_TEX_HURT);
             enemies->push_back(en);  // legacy code. TODO: remove AKchually no
         }
     }
@@ -133,10 +133,10 @@ void Game::draw() {
 
     for (auto& en : *enemies) {
         if (en.hp == 0)
-            DrawTextureEx(en.hurtTex, (Vector2){en.posX - 20, en.posY - 20},
+            DrawTextureEx(en.hurtTex, (Vector2){en.posX - en.radius, en.posY - en.radius},
                           1.0f, 0.6f, WHITE);
         else {
-            DrawTextureEx(en.idleTex, (Vector2){en.posX - 20, en.posY - 20},
+            DrawTextureEx(en.idleTex, (Vector2){en.posX - en.radius, en.posY - en.radius},
                           1.0f, 0.6f, WHITE);
         }
     }
@@ -158,6 +158,13 @@ void Game::draw() {
     for (auto i = 0; i < player->currentWeapon->barrel; i++) {
         DrawRectangle(40 + (i * 20), SCREENHEIGHT - 60, 10, 30, RED);
     }
+    if (enemies->at(0).hp >= 2) {
+        for (auto i = 0; i < enemies->size(); i++) {
+            for (auto j = 0; j < enemies->at(i).hp; j++) {
+                DrawRectangle(400 + (j * 40), 80 + (i * 40), 40, 30, COOLPURPLE);
+            }
+        }
+    }
 }
 
 // progress the game & check for player death
@@ -176,15 +183,12 @@ int Game::tick() {
 
     if (player->victims == nPerWave && nWaves > 1) {
         nWaves--;
-        std::cout << "DEBUG : waves left [" << nWaves << std::endl;
-        std::cout << "DEBUG : victims [" << nWaves << std::endl;
         for (int i = 0 ; i < nPerWave; i++) {
             Entity en(1);
             en.radius = 20;
             en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
             en.hurtTex = LoadTexture(SBIRE_TEX_HURT);
             enemies->push_back(en);
-            std::cout << "DEBUG : spawn new enemy [" << i << std::endl;
         }
     }
 
