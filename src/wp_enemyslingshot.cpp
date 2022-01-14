@@ -8,22 +8,22 @@
 #include "gameplay.hpp"
 
 wp_enemysling::wp_enemysling(const char* s, const char* r)
-    : AWeapon(300.0f, 10, 1, 0.0, s, r, "sling") {}
+    : AWeapon(300.0f, 10, 10, 0.0, s, r, "sling") {}
 
 int wp_enemysling::bang(std::vector<Entity>* enemies, Entity* baddie) {
     if (barrel == 0) {
         return (1);
     } else {
         barrel--;
-        PlaySound(shot);
         t = GetTime();
         // enemysling spawns a new enemy every @reload seconds. thats it.
         // it's a slingshot
         //
         Entity en(1);
-        en.posX = 0;
-        en.posY = 0;
-        en.direction = (Vector2){1.0f, 1.0f};
+        en.posX = baddie->posX + 10;
+        en.posY = baddie->posY + 10;
+        en.direction.x = baddie->direction.x * 2.0f;
+        en.direction.y = baddie->direction.y * 2.0f;
         en.radius = 20;
         en.currentWeapon = nullptr;
         en.idleTex = LoadTexture(SBIRE_TEX_IDLE);

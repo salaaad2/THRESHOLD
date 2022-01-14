@@ -6,7 +6,6 @@ Projectile::Projectile(Vector2 const& dir, Vector2 const& pos)
 
 Projectile::~Projectile() {}
 
-Projectile *
-Projectile::getProjectile() {
+Projectile* Projectile::getProjectile() {
     return (this);
 }

@@ -16,7 +16,7 @@ AWeapon::AWeapon(float const rg,
                  double const& cd,
                  const char* s,
                  const char* r,
-                 std::string const & nm)
+                 std::string const& nm)
     : range(rg), damage(dmg), max(mag), cooldown(cd), name(nm) {
     shot = LoadSound(s);
     reload = LoadSound(r);

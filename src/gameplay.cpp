@@ -64,9 +64,7 @@ Game::Game(std::string const& path) : current(path) {
     InitAudioDevice();
 
     AWeapon* shotty = new wp_shotty(SHOTTY_BANG, SHOTTY_RELOAD);
-    AWeapon* ar = new wp_assaultrifle(AR_BANG,
-                                      SHOTTY_RELOAD
-    );
+    AWeapon* ar = new wp_assaultrifle(AR_BANG, SHOTTY_RELOAD);
     AWeapon* sling = new wp_enemysling(SHOTTY_BANG, SHOTTY_RELOAD);
 
     for (auto i = 0; i < nPerWave; i++) {
@@ -151,14 +149,17 @@ void Game::draw() {
     if (player->fury >= 5) {
         DrawText("[E] FURY", SCREENWIDTH - 300, 10, 50, RED);
     }
-    for (auto i = 0; i < player->currentWeapon->barrel; i++) { // draw weapon ammo
+    for (auto i = 0; i < player->currentWeapon->barrel;
+         i++) {  // draw weapon ammo
         DrawRectangle(40 + (i * 20), SCREENHEIGHT - 60, 10, 30, RED);
     }
-    if (enemies->at(0).hp >= 2) { // draw hp in boss stages
+    if (enemies->at(0).hp >= 2) {  // draw hp in boss stages
         for (auto i = 0; i < enemies->size(); i++) {
-            for (auto j = 0; j < enemies->at(i).hp; j++) {
-                DrawRectangle(400 + (j * 40), 80 + (i * 40), 40, 30,
-                              COOLPURPLE);
+            if (enemies->at(i).hp >= 2) {
+                for (auto j = 0; j < enemies->at(i).hp; j++) {
+                    DrawRectangle(400 + (j * 40), 80 + (i * 40), 40, 30,
+                                  COOLPURPLE);
+                }
             }
         }
     }
@@ -214,10 +215,12 @@ int Game::tick() {
                 en->posY += 2.1f;
                 en->direction.y += 0.1f;
             }
-            if ((GetRandomValue(0, 100) == 50) && (en->currentWeapon !=
-            nullptr)) {
+            if ((GetRandomValue(0, 100) == 50) &&
+                (en->currentWeapon != nullptr)) {
                 std::cout << "spawn enemy" << std::endl;
                 en->currentWeapon->bang(enemies, &(*en));
+                nEnemies++;
+                return (0);
             }
         } else {
             if (en->posX >= SCREENWIDTH || en->posX <= 0 ||
