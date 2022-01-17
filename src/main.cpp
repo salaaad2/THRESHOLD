@@ -25,7 +25,7 @@ int main(void) {
     auto nPick = 0;
     Texture2D background;
     Game* game = nullptr;
-    std::ofstream ifs("../meta/maps/savestate");
+    std::ofstream saveOut("../meta/maps/savestate");
 
     std::string path = "../meta/maps";
     int i = 0;
@@ -37,6 +37,7 @@ int main(void) {
             i++;
         }
     }
+
     // Main game loop
     while (!WindowShouldClose()) /* Detect window close button or ESC key */
     {
@@ -82,7 +83,7 @@ int main(void) {
                 if (IsKeyPressed(KEY_ENTER)) {
                     std::string next("../meta/maps/");
                     next += game->getNext();
-                    ifs << game->getCurrent();
+                    saveOut << game->getCurrent();
 
                     delete game;
                     CloseAudioDevice();
@@ -185,7 +186,7 @@ int main(void) {
         }
         EndDrawing();
     }
-    ifs.close();
+    saveOut.close();
     CloseWindow();
     return 0;
 }

@@ -215,12 +215,12 @@ int Game::tick() {
                 en->posY += 2.1f;
                 en->direction.y += 0.1f;
             }
-            if ((GetRandomValue(0, 100) == 50) &&
+            if ((GetRandomValue(0, 100) == 50) && // make enemy fire at random intervals
                 (en->currentWeapon != nullptr)) {
-                std::cout << "spawn enemy" << std::endl;
                 en->currentWeapon->bang(enemies, &(*en));
                 nEnemies++;
-                return (0);
+                return (0); // NOTE: this return is here to make sure that we don't run into a segfault if
+                            // adding an enemy to the vector reallocs and invalidates the iterator.
             }
         } else {
             if (en->posX >= SCREENWIDTH || en->posX <= 0 ||
