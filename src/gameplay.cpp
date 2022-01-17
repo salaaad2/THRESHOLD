@@ -124,7 +124,7 @@ void Game::draw() {
     auto left = std::to_string(enemies->size());
 
     for (auto& en : *enemies) {
-        if (en.hp == 0)
+        if (en.hp <= 0)
             DrawTextureEx(en.hurtTex,
                           (Vector2){en.posX - en.radius, en.posY - en.radius},
                           1.0f, 0.6f, WHITE);
@@ -173,9 +173,6 @@ int Game::tick() {
     DrawTexture(crosshair, target.x, target.y, WHITE);
 
     auto v2 = (Vector2){target.x - player->posX, target.y - player->posY};
-
-    DrawText(std::to_string(v2.x).c_str(), 1400, 10, 20, RED);
-    DrawText(std::to_string(v2.y).c_str(), 1400, 30, 20, RED);
 
     player->direction = v2;
 

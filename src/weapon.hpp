@@ -27,7 +27,7 @@ class AWeapon {
     double t;
 
     float const range;
-    unsigned int const& damage;
+    unsigned int const damage;
     const std::string name;
 
    public:

@@ -7,7 +7,7 @@
 #include "entity.hpp"
 
 wp_assaultrifle::wp_assaultrifle(const char* s, const char* r)
-    : AWeapon(300.0f, 10, 30, 0.0, s, r, "ar") {}
+    : AWeapon(300.0f, 1, 30, 0.0, s, r, "ar") {}
 
 int wp_assaultrifle::bang(std::vector<Entity>* enemies, Entity* player) {
     if (barrel == 0) {
@@ -43,7 +43,7 @@ int wp_assaultrifle::bang(std::vector<Entity>* enemies, Entity* player) {
                                         playerPosition, add2,
                                         (en->radius * 2))) {  // enemy hit
                 std::cout << "hit" << std::endl;
-                en->hp--;
+                en->hp -= damage;
                 if (en->hp == 0) {
                     en->direction.x = (playerDirection.x / 2);
                     en->direction.y = (playerDirection.y / 2);

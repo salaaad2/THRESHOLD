@@ -7,7 +7,7 @@
 #include "entity.hpp"
 
 wp_shotty::wp_shotty(const char* s, const char* r)
-    : AWeapon(100.0f, 10, 10, 0.5, s, r, "shotty") {}
+    : AWeapon(100.0f, 3, 10, 0.5, s, r, "shotty") {}
 
 int wp_shotty::bang(std::vector<Entity>* enemies, Entity* player) {
     if (barrel == 0 || GetTime() < (t + cooldown)) {
@@ -44,8 +44,8 @@ int wp_shotty::bang(std::vector<Entity>* enemies, Entity* player) {
                                         playerPosition, add2,
                                         (en->radius * 2))) {  // enemy hit
                 std::cout << "hit" << std::endl;
-                en->hp--;
-                if (en->hp == 0) {
+                en->hp -= damage;
+                if (en->hp <= 0) {
                     en->direction.x = (playerDirection.x / 2);
                     en->direction.y = (playerDirection.y / 2);
                     player->victims += 1;
