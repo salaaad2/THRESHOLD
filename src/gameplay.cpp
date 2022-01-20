@@ -25,23 +25,24 @@ Level* Game::parse(std::string const& path) {
     std::string tok;
     Level* ret = new Level();
 
-    std::cout << "Init: reading level.file [" << path << "]" << std::endl;
+    std::cout << "INIT: reading level.file [" << path << "]" << std::endl;
     while (ifs >> tok) {
         if (tok == "MINIONS") {
             ifs >> tok;
             ret->nMinion = std::atoi(tok.c_str());
             ifs >> tok;
             ret->mRadius = std::atoi(tok.c_str());
+            ret->mHp = 1;
         }
         if (tok == "BOSS") {
             ifs >> tok;
-            ret->bHp = (tok == "0") ? 1 : 0;
+            ret->nBoss = (tok == "0") ? 0 : 1;
             ret->bRadius = ret->mRadius;
         }
         if (tok == "NEXT") {
             ifs >> tok;
             ret->next = tok;
-            std::cout << "next ret is " << next;
+            std::cout << "DEBUG: next level is " << ret->next;
         }
         if (tok == "WAVES") {
             ifs >> tok;
@@ -55,11 +56,12 @@ Level* Game::parse(std::string const& path) {
         }
     }
     ret->nTotal = (ret->nBoss + ret->nGrunts + ret->nMinion);
+    ret->current = path;
     ifs.close();
     return (ret);
 }
 
-Game::Game(std::string const& path) : current(path) {
+Game::Game(std::string const& path) {
     auto radius = 0;
     auto ehp = 0;
 
@@ -72,25 +74,24 @@ Game::Game(std::string const& path) : current(path) {
     AWeapon* ar = new wp_assaultrifle(AR_BANG, SHOTTY_RELOAD);
     AWeapon* sling = new wp_enemysling(SHOTTY_BANG, SHOTTY_RELOAD);
 
-    for (auto i = 0; i < level->nTotal; i++) {
-        if (ehp == 1) {
-            Entity en(ehp);
-            en.radius = radius;
-            en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
-            en.hurtTex = LoadTexture(SBIRE_TEX_HURT);
-            en.currentWeapon = nullptr;
-            enemies->push_back(en);
-        } else {
-            Entity en(ehp);
-            en.radius = radius;
-            en.wp[0] = sling;
-            en.currentWeapon = en.wp[0];
-            en.idleTex = LoadTexture(BOSS_TEX_IDLE);
-            en.hurtTex = LoadTexture(BOSS_TEX_HURT);
-            enemies->push_back(en);  // legacy code. TODO: remove AKchually no
-        }
+    for (auto i = 0; i < level->nMinion; i++) {
+        Entity en(level->mHp);
+        en.radius = level->mRadius;
+        en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
+        en.hurtTex = LoadTexture(SBIRE_TEX_HURT);
+        en.currentWeapon = nullptr;
+        enemies->push_back(en);
     }
-    player = new Entity;
+    for (auto i = 0; i < level->nBoss; i++) {
+        Entity en(level->bHp);
+        en.radius = level->bRadius;
+        en.wp[0] = sling;
+        en.currentWeapon = en.wp[0];
+        en.idleTex = LoadTexture(BOSS_TEX_IDLE);
+        en.hurtTex = LoadTexture(BOSS_TEX_HURT);
+        enemies->push_back(en);  // legacy code. TODO: remove AKchually no
+    }
+    player = new Entity();
     player->posX = 0;
     player->posY = SCREENHEIGHT / 2.0f;
     player->direction.x = 100;
@@ -98,13 +99,12 @@ Game::Game(std::string const& path) : current(path) {
     player->radius = 10;
     player->victims = 0;
     player->fury = 0;
-
-    crosshair = LoadTexture(CROSSHAIR_TEX);
-
     player->wp[0] = shotty;
     player->wp[1] = ar;
     player->currentWeapon = player->wp[0];
     player->idleTex = LoadTexture(MUCHACHO_TEX);
+
+    crosshair = LoadTexture(CROSSHAIR_TEX);
 
     frameWidth = player->idleTex.width;
     frameHeight = player->idleTex.height;
@@ -117,6 +117,7 @@ Game::Game(std::string const& path) : current(path) {
 Game::~Game() {
     delete enemies;
     delete player;
+    delete level;
 }
 
 // draw bad boys and player
@@ -177,18 +178,6 @@ int Game::tick() {
     auto v2 = (Vector2){target.x - player->posX, target.y - player->posY};
 
     player->direction = v2;
-
-    if (player->victims == level.nPerWave && nWaves > 1) {
-        nWaves--;
-        for (int i = 0; i < level.nPerWave; i++) {
-            Entity en(1);
-            en.radius = 20;
-            en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
-            en.hurtTex = LoadTexture(SBIRE_TEX_HURT);
-            en.currentWeapon = nullptr;
-            enemies->push_back(en);
-        }
-    }
 
     //
     // end player logic
@@ -339,15 +328,15 @@ int Game::shoot() const {
 }
 
 std::string const& Game::getNext() const {
-    return next;
+    return level->next;
 }
 
 std::string const& Game::getCurrent() const {
-    return current;
+    return level->current;
 }
 
 std::string const& Game::getBackground() const {
-    return background;
+    return level->background;
 }
 
 int const& Game::getKills() const {

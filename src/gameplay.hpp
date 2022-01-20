@@ -58,9 +58,6 @@ class Game {
 
     Entity* player;
 
-    std::string next;        // next level
-    std::string current;     // next level
-    std::string background;  // next level
     Level* level;
 
     int frameWidth;
