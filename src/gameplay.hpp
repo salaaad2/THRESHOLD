@@ -10,6 +10,7 @@
 #define GAMEPLAY_H_
 
 #include "entity.hpp"
+#include "map.hpp"
 #include "terrain.hpp"
 #include "window.hpp"
 
@@ -60,6 +61,7 @@ class Game {
     std::string next;        // next level
     std::string current;     // next level
     std::string background;  // next level
+    Level* level;
 
     int frameWidth;
     int frameHeight;
@@ -74,7 +76,7 @@ class Game {
     Game(std::string const& path);
     ~Game();
 
-    void start();
+    Level* parse(std::string const& path);
     void draw();
     int tick();
     int getKeys();

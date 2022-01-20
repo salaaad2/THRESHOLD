@@ -14,6 +14,8 @@
 #include <map>
 #include "weapon.hpp"
 
+#define MINION_SPEED 2.1f
+
 class Entity {
    public:
     int hp;

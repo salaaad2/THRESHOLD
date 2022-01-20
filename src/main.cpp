@@ -56,7 +56,6 @@ int main(void) {
                     game = new Game(s);
                     background = LoadTexture(game->getBackground().c_str());
                     gs = GAMEPLAY;
-                    game->start();
                 }
                 if (IsKeyPressed(KEY_DOWN) && nPick < (pick.size() - 1)) {
                     nPick++;

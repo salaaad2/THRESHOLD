@@ -20,46 +20,51 @@
 #include "wp_enemyslingshot.hpp"
 #include "wp_shotty.hpp"
 
-Game::Game(std::string const& path) : current(path) {
+Level* Game::parse(std::string const& path) {
     std::ifstream ifs(path);
     std::string tok;
-    auto radius = 0;
-    auto ehp = 0;
+    Level* ret = new Level();
 
-    std::cout << "Init: reading map file [" << path << "]" << std::endl;
+    std::cout << "Init: reading level.file [" << path << "]" << std::endl;
     while (ifs >> tok) {
-        if (tok == "ENEMIES") {
+        if (tok == "MINIONS") {
             ifs >> tok;
-            std::cout << "will spawn " << tok << " enemies";
-            nEnemies = std::atoi(tok.c_str());
+            ret->nMinion = std::atoi(tok.c_str());
             ifs >> tok;
-            radius = std::atoi(tok.c_str());
-        }
-        if (tok == "NEXT") {
-            ifs >> tok;
-            next = tok;
-            std::cout << "next level is " << next;
+            ret->mRadius = std::atoi(tok.c_str());
         }
         if (tok == "BOSS") {
             ifs >> tok;
-            ehp = (tok == "0") ? 1 : 0;
-            if (ehp == 0) {
-                ifs >> tok;
-                ehp = std::atoi(tok.c_str());
-            }
+            ret->bHp = (tok == "0") ? 1 : 0;
+            ret->bRadius = ret->mRadius;
+        }
+        if (tok == "NEXT") {
+            ifs >> tok;
+            ret->next = tok;
+            std::cout << "next ret is " << next;
         }
         if (tok == "WAVES") {
             ifs >> tok;
-            nWaves = std::atoi(tok.c_str());
+            ret->nWaves = std::atoi(tok.c_str());
             ifs >> tok;
-            nPerWave = std::atoi(tok.c_str());
+            ret->nPerWave = std::atoi(tok.c_str());
         }
         if (tok == "BACKGROUND") {
             ifs >> tok;
-            background = tok;
+            ret->background = tok;
         }
     }
+    ret->nTotal = (ret->nBoss + ret->nGrunts + ret->nMinion);
     ifs.close();
+    return (ret);
+}
+
+Game::Game(std::string const& path) : current(path) {
+    auto radius = 0;
+    auto ehp = 0;
+
+    level = parse(path);
+
     enemies = new std::vector<Entity>;
     InitAudioDevice();
 
@@ -67,7 +72,7 @@ Game::Game(std::string const& path) : current(path) {
     AWeapon* ar = new wp_assaultrifle(AR_BANG, SHOTTY_RELOAD);
     AWeapon* sling = new wp_enemysling(SHOTTY_BANG, SHOTTY_RELOAD);
 
-    for (auto i = 0; i < nPerWave; i++) {
+    for (auto i = 0; i < level->nTotal; i++) {
         if (ehp == 1) {
             Entity en(ehp);
             en.radius = radius;
@@ -100,23 +105,18 @@ Game::Game(std::string const& path) : current(path) {
     player->wp[1] = ar;
     player->currentWeapon = player->wp[0];
     player->idleTex = LoadTexture(MUCHACHO_TEX);
-}
 
-Game::~Game() {
-    delete enemies;
-    delete player;
-}
-
-void Game::start() {
-    std::cout << "----- Gameplay: Start -----" << std::endl;
-    std::cout << "Gameplay: " << nEnemies << "enemies need to be spawned"
-              << std::endl;
     frameWidth = player->idleTex.width;
     frameHeight = player->idleTex.height;
 
     sourceRec = {0.0f, 0.0f, (float)frameWidth, (float)frameHeight};
 
     origin = {(float)frameWidth, (float)frameHeight};
+}
+
+Game::~Game() {
+    delete enemies;
+    delete player;
 }
 
 // draw bad boys and player
@@ -168,6 +168,8 @@ void Game::draw() {
 // progress the game & check for player death
 // NEW: go towards player NEXT: spawn at different furyTimes
 int Game::tick() {
+    // player logic
+    //
     auto target = GetMousePosition();
 
     DrawTexture(crosshair, target.x, target.y, WHITE);
@@ -176,9 +178,9 @@ int Game::tick() {
 
     player->direction = v2;
 
-    if (player->victims == nPerWave && nWaves > 1) {
+    if (player->victims == level.nPerWave && nWaves > 1) {
         nWaves--;
-        for (int i = 0; i < nPerWave; i++) {
+        for (int i = 0; i < level.nPerWave; i++) {
             Entity en(1);
             en.radius = 20;
             en.idleTex = LoadTexture(SBIRE_TEX_IDLE);
@@ -187,6 +189,12 @@ int Game::tick() {
             enemies->push_back(en);
         }
     }
+
+    //
+    // end player logic
+    // -----------------------------------
+    // baddie logic
+    //
 
     for (auto en = enemies->begin(); en != enemies->end(); en++) {
         if (en->hp > 0) {
@@ -197,27 +205,30 @@ int Game::tick() {
                 en->direction.y = -en->direction.y;
             }
             if (en->posX >= player->posX) {
-                en->posX -= 2.1f;
+                en->posX -= MINION_SPEED;
                 en->direction.x -= 0.1f;
             }
             if (en->posY >= player->posY) {
-                en->posY -= 2.1f;
+                en->posY -= MINION_SPEED;
                 en->direction.y -= 0.1f;
             }
             if (en->posX <= player->posX) {
-                en->posX += 2.1f;
+                en->posX += MINION_SPEED;
                 en->direction.x += 0.1f;
             }
             if (en->posY <= player->posY) {
-                en->posY += 2.1f;
+                en->posY += MINION_SPEED;
                 en->direction.y += 0.1f;
             }
-            if ((GetRandomValue(0, 100) == 50) && // make enemy fire at random intervals
+            if ((GetRandomValue(0, 100) ==
+                 50) &&  // make enemy fire at random intervals
                 (en->currentWeapon != nullptr)) {
                 en->currentWeapon->bang(enemies, &(*en));
                 nEnemies++;
-                return (0); // NOTE: this return is here to make sure that we don't run into a segfault if
-                            // adding an enemy to the vector reallocs and invalidates the iterator.
+                return (
+                    0);  // NOTE: this return is here to make sure that we don't
+                         // run into a segfault if adding an enemy to the vector
+                         // in case it reallocs and invalidates the iterator.
             }
         } else {
             if (en->posX >= SCREENWIDTH || en->posX <= 0 ||
