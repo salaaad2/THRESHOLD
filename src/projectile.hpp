@@ -3,13 +3,11 @@
 
 #include <raylib.h>
 
-class Projectile {
-    Vector2 const& direction;
-    Vector2 const& position;
-
-   public:
-    Projectile(Vector2 const& direction, Vector2 const& position);
-    ~Projectile();
-};
+typedef struct Projectile {
+    int posX, posY;
+    Vector2 dir;
+    float radius;
+    float damage;
+} Projectile;
 
 #endif /* PROJECTILE_H */

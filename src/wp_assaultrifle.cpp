@@ -7,7 +7,7 @@
 #include "entity.hpp"
 
 wp_assaultrifle::wp_assaultrifle(const char* s, const char* r)
-    : AWeapon(300.0f, 1, 30, 0.0, s, r, "ar") {}
+    : AWeapon(300.0f, 1, 30, 0.0, s, r, "ar", false) {}
 
 int wp_assaultrifle::bang(std::vector<Entity>* enemies, Entity* player) {
     if (barrel == 0) {
@@ -65,4 +65,8 @@ int wp_assaultrifle::bang(std::vector<Entity>* enemies, Entity* player) {
         }
         return (0);
     }
+}
+
+Projectile const& wp_assaultrifle::getProjectile() const {
+    return (projectile);
 }

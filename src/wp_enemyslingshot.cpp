@@ -8,7 +8,7 @@
 #include "gameplay.hpp"
 
 wp_enemysling::wp_enemysling(const char* s, const char* r)
-    : AWeapon(300.0f, 10, 10, 0.0, s, r, "sling") {}
+    : AWeapon(300.0f, 10, 10, 0.0, s, r, "sling", false) {}
 
 int wp_enemysling::bang(std::vector<Entity>* enemies, Entity* baddie) {
     if (barrel == 0) {
@@ -38,4 +38,8 @@ int wp_enemysling::bang(std::vector<Entity>* enemies, Entity* baddie) {
         }
         return (0);
     }
+}
+
+Projectile const& wp_enemysling::getProjectile() const {
+    return (projectile);
 }

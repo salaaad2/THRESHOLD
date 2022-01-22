@@ -11,11 +11,13 @@
 
 #include "entity.hpp"
 #include "map.hpp"
+#include "projectile.hpp"
 #include "terrain.hpp"
 #include "window.hpp"
 
 #include <raylib.h>
 #include <iostream>
+#include <list>
 #include <vector>
 
 // sound defines
@@ -55,6 +57,8 @@ class Game {
     // having wrong maps can (and probably will) result in a crash
 
     std::vector<Entity>* enemies;
+
+    std::list<Projectile>* projectiles;
 
     Entity* player;
 

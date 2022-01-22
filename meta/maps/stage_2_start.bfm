@@ -1,5 +1,5 @@
 BOSS 2 10
-MINIONS 2 50
+MINIONS 2 20
 WAVES 1 2
 NEXT stage_1_boss.bfm
 BACKGROUND ../meta/media/sprites/stage_1_bossbg.png

@@ -17,6 +17,7 @@ class wp_assaultrifle : public AWeapon {
     ~wp_assaultrifle();
 
     int bang(std::vector<Entity>* enemies, Entity* player);
+    Projectile const& getProjectile() const;
 };
 
 #endif

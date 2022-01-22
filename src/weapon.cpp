@@ -16,8 +16,14 @@ AWeapon::AWeapon(float const rg,
                  double const& cd,
                  const char* s,
                  const char* r,
-                 std::string const& nm)
-    : range(rg), damage(dmg), max(mag), cooldown(cd), name(nm) {
+                 std::string const& nm,
+                 bool const& hasProj)
+    : range(rg),
+      damage(dmg),
+      max(mag),
+      cooldown(cd),
+      name(nm),
+      hasProjectiles(hasProj) {
     shot = LoadSound(s);
     reload = LoadSound(r);
     SetSoundVolume(shot, 0.3f);

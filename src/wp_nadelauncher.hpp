@@ -1,20 +1,20 @@
 /*********************************/
 /*   THRESHOLD        (  //      */
-/*   enemysling        ( )/      */
+/*   rifle             ( )/      */
 /*   by salade         )(/       */
 /*  ________________  ( /)       */
 /* ()__)____________)))))   :^}  */
 /*********************************/
 
-#ifndef WP_ENEMYSLING_H_
-#define WP_ENEMYSLING_H_
+#ifndef WP_NADELAUNCHER_H_
+#define WP_NADELAUNCHER_H_
 
 #include "weapon.hpp"
 
-class wp_enemysling : public AWeapon {
+class wp_nadelauncher : public AWeapon {
    public:
-    wp_enemysling(const char* s, const char* r);
-    ~wp_enemysling();
+    wp_nadelauncher(const char* s, const char* r);
+    ~wp_nadelauncher();
 
     int bang(std::vector<Entity>* enemies, Entity* player);
     Projectile const& getProjectile() const;

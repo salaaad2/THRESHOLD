@@ -19,6 +19,7 @@
 #include "window.hpp"
 #include "wp_assaultrifle.hpp"
 #include "wp_enemyslingshot.hpp"
+#include "wp_nadelauncher.hpp"
 #include "wp_shotty.hpp"
 
 Level* Game::parse(std::string const& path) {
@@ -76,6 +77,7 @@ Game::Game(std::string const& path) {
 
     AWeapon* shotty = new wp_shotty(SHOTTY_BANG, SHOTTY_RELOAD);
     AWeapon* ar = new wp_assaultrifle(AR_BANG, SHOTTY_RELOAD);
+    AWeapon* nadelauncher = new wp_nadelauncher(AR_BANG, SHOTTY_RELOAD);
     AWeapon* sling = new wp_enemysling(SHOTTY_BANG, SHOTTY_RELOAD);
 
     for (auto i = 0; i < level->nMinion; i++) {
@@ -105,6 +107,7 @@ Game::Game(std::string const& path) {
     player->fury = 0;
     player->wp[0] = shotty;
     player->wp[1] = ar;
+    player->wp[2] = nadelauncher;
     player->currentWeapon = player->wp[0];
     player->idleTex = LoadTexture(MUCHACHO_TEX);
 
@@ -130,7 +133,6 @@ void Game::draw() {
     auto left = std::to_string(enemies->size());
 
     for (auto& en : *enemies) {
-        DrawCircle(en.posX, en.posY, en.radius, GREEN);
         if (en.hp <= 0)
             DrawTextureEx(en.hurtTex,
                           (Vector2){en.posX - en.radius, en.posY - en.radius},
@@ -142,7 +144,7 @@ void Game::draw() {
         }
         if (en.hp > 1) {
             for (auto j = 0; j < en.hp; j++) {
-                DrawRectangle(en.posX + (10 * j), en.posY - 100, 10, 10,
+                DrawRectangle((en.posX - 50) + (10 * j), en.posY - 100, 10, 10,
                               COOLPURPLE);
             }
         }
@@ -166,9 +168,9 @@ void Game::draw() {
          i++) {  // draw weapon ammo
         DrawRectangle(40 + (i * 20), SCREENHEIGHT - 60, 10, 30, RED);
     }
-    for (auto i = 0; i < enemies->size(); i++) {
-        if (enemies->at(i).hp >= 2) {
-        }
+
+    for (auto& pr : *projectiles) {
+        DrawCircle(pr.posX, pr.posY, pr.radius, COOLPURPLE);
     }
 }
 
@@ -331,6 +333,9 @@ int Game::shoot() const {
         return (0);
     }
     player->currentWeapon->bang(enemies, player);
+    if (player->currentWeapon->hasProjectiles) {
+        projectiles->push_back(player->currentWeapon->getProjectile());
+    }
     if (player->currentWeapon->empty == true) {
         player->reloadTime = GetTime();
     }

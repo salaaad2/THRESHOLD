@@ -17,6 +17,7 @@ class wp_shotty : public AWeapon {
     ~wp_shotty();
 
     int bang(std::vector<Entity>* enemies, Entity* player);
+    Projectile const& getProjectile() const;
 };
 
 #endif
