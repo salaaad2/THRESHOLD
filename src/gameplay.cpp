@@ -11,6 +11,7 @@
 #include <raylib.h>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <string>
 #include "raymath.h"
 
@@ -36,8 +37,11 @@ Level* Game::parse(std::string const& path) {
         }
         if (tok == "BOSS") {
             ifs >> tok;
-            ret->nBoss = (tok == "0") ? 0 : 1;
-            ret->bRadius = ret->mRadius;
+            ret->nBoss = std::atoi(tok.c_str());
+            ifs >> tok;
+            ret->bHp = std::atoi(tok.c_str());
+            ret->bRadius = 50;
+            std::cerr << "DEBUG: bosses : " << ret->nBoss << "\n";
         }
         if (tok == "NEXT") {
             ifs >> tok;
@@ -112,6 +116,7 @@ Game::Game(std::string const& path) {
     sourceRec = {0.0f, 0.0f, (float)frameWidth, (float)frameHeight};
 
     origin = {(float)frameWidth, (float)frameHeight};
+    nEnemies = level->nTotal;
 }
 
 Game::~Game() {
@@ -125,6 +130,7 @@ void Game::draw() {
     auto left = std::to_string(enemies->size());
 
     for (auto& en : *enemies) {
+        DrawCircle(en.posX, en.posY, en.radius, GREEN);
         if (en.hp <= 0)
             DrawTextureEx(en.hurtTex,
                           (Vector2){en.posX - en.radius, en.posY - en.radius},
@@ -133,6 +139,12 @@ void Game::draw() {
             DrawTextureEx(en.idleTex,
                           (Vector2){en.posX - en.radius, en.posY - en.radius},
                           1.0f, 0.6f, WHITE);
+        }
+        if (en.hp > 1) {
+            for (auto j = 0; j < en.hp; j++) {
+                DrawRectangle(en.posX + (10 * j), en.posY - 100, 10, 10,
+                              COOLPURPLE);
+            }
         }
     }
     // Destination rectangle
@@ -154,14 +166,8 @@ void Game::draw() {
          i++) {  // draw weapon ammo
         DrawRectangle(40 + (i * 20), SCREENHEIGHT - 60, 10, 30, RED);
     }
-    if (enemies->at(0).hp >= 2) {  // draw hp in boss stages
-        for (auto i = 0; i < enemies->size(); i++) {
-            if (enemies->at(i).hp >= 2) {
-                for (auto j = 0; j < enemies->at(i).hp; j++) {
-                    DrawRectangle(400 + (j * 40), 80 + (i * 40), 40, 30,
-                                  COOLPURPLE);
-                }
-            }
+    for (auto i = 0; i < enemies->size(); i++) {
+        if (enemies->at(i).hp >= 2) {
         }
     }
 }
@@ -185,7 +191,9 @@ int Game::tick() {
     // baddie logic
     //
 
+    // std::cerr << "DEBUG: start baddie move loop \n";
     for (auto en = enemies->begin(); en != enemies->end(); en++) {
+        // std::cerr << "DEBUG: direction :" << en->direction.x<< "\n";
         if (en->hp > 0) {
             if (en->posX >= SCREENWIDTH || en->posX <= 0) {
                 en->direction.x = -en->direction.x;
@@ -209,9 +217,10 @@ int Game::tick() {
                 en->posY += MINION_SPEED;
                 en->direction.y += 0.1f;
             }
-            if ((GetRandomValue(0, 100) ==
-                 50) &&  // make enemy fire at random intervals
-                (en->currentWeapon != nullptr)) {
+            if ((en->currentWeapon != nullptr) &&
+                (GetRandomValue(0, 100) ==
+                 50)  // make enemy fire at random intervals
+            ) {
                 en->currentWeapon->bang(enemies, &(*en));
                 nEnemies++;
                 return (
@@ -223,6 +232,7 @@ int Game::tick() {
             if (en->posX >= SCREENWIDTH || en->posX <= 0 ||
                 en->posY >= SCREENHEIGHT) {
                 enemies->erase(en);
+                std::cerr << "DEBUG: delete baddie" << std::endl;
                 return (0);
             }
         }
