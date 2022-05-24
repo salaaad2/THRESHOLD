@@ -1,4 +1,4 @@
-# project BUFMEZ (aka threshold)
+# project THRESHOLD
 
 This is a small work in progress game. This was made using [raylib](http://raylib.com)
 
@@ -16,30 +16,25 @@ Feel free to fork & add features.
 mkdir build 
 cd build
 cmake ..
-./space
+./threshold
 ```
-
 
 ## Work In progress 
 
 - Visual improvements
-
 - Better Level System
 
 ## Future work
 
 - Music
-
 - Optimizations on vectors (too many function calls)
 
 
-## TODO
+## Ideas
 
 ### Weapons
-- [DONE]reload 
-- [DONE]visual representation of mag
-- [TODO]more weapons (gravity gun ?)
+- MORE weapons (gravity gun ?)
 
 ### Maps
-- more
+- MORE
 - terrain ?
