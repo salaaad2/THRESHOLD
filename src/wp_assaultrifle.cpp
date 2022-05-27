@@ -9,6 +9,8 @@
 wp_assaultrifle::wp_assaultrifle(const char* s, const char* r)
     : AWeapon(300.0f, 1, 30, 0.0, s, r, "ar", false) {}
 
+wp_assaultrifle::~wp_assaultrifle() {}
+
 int wp_assaultrifle::bang(std::vector<Entity>* enemies, Entity* player) {
     if (barrel == 0) {
         return (1);

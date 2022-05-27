@@ -14,7 +14,7 @@
 class wp_nadelauncher : public AWeapon {
    public:
     wp_nadelauncher(const char* s, const char* r);
-    ~wp_nadelauncher();
+    virtual ~wp_nadelauncher();
 
     int bang(std::vector<Entity>* enemies, Entity* player);
     Projectile const& getProjectile() const;

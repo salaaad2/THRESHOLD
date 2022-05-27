@@ -84,12 +84,12 @@ int main(void) {
                     next += game->getNext();
                     saveOut << game->getCurrent();
 
-                    delete game;
                     CloseAudioDevice();
-                    std::cout << "next level " << next << std::endl;
                     if (game->getNext() != "0") {
+						delete game;
                         game = new Game(next);
                         gs = GAMEPLAY;
+						std::cout << "next level " << next << std::endl;
                     }
                 }
                 break;

@@ -19,7 +19,17 @@ add_executable(${PROJECT_NAME}
     src/terrain.cpp
     src/entity.cpp)
 
-target_link_libraries(${PROJECT_NAME} raylib m pthread dl)
+target_link_libraries(${PROJECT_NAME}
+	raylib 
+	m 
+	pthread 
+	dl
+)
+
+target_compile_options(${PROJECT_NAME}
+	PRIVATE "-O3"
+	PRIVATE "-march=native"
+)
 
 # Checks if OSX and links appropriate frameworks (only required on MacOS)
 if (APPLE)

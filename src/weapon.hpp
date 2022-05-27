@@ -42,7 +42,7 @@ class AWeapon {
             const char* r,            // reload sound path
             std::string const& nm,    // name
             bool const& hasProj);     // projectiles ? yea/nay
-    ~AWeapon();
+    virtual ~AWeapon();
 
     virtual int bang(std::vector<Entity>* enemies, Entity* player) = 0;
     void refill();

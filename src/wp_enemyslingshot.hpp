@@ -14,7 +14,7 @@
 class wp_enemysling : public AWeapon {
    public:
     wp_enemysling(const char* s, const char* r);
-    ~wp_enemysling();
+    virtual ~wp_enemysling();
 
     int bang(std::vector<Entity>* enemies, Entity* player);
     Projectile const& getProjectile() const;

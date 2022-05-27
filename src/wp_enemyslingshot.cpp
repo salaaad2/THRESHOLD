@@ -10,6 +10,8 @@
 wp_enemysling::wp_enemysling(const char* s, const char* r)
     : AWeapon(300.0f, 10, 10, 0.0, s, r, "sling", false) {}
 
+wp_enemysling::~wp_enemysling() {}
+
 int wp_enemysling::bang(std::vector<Entity>* enemies, Entity* baddie) {
     if (barrel == 0) {
         return (1);

@@ -168,10 +168,6 @@ void Game::draw() {
          i++) {  // draw weapon ammo
         DrawRectangle(40 + (i * 20), SCREENHEIGHT - 60, 10, 30, RED);
     }
-
-    for (auto& pr : *projectiles) {
-        DrawCircle(pr.posX, pr.posY, pr.radius, COOLPURPLE);
-    }
 }
 
 // progress the game & check for player death
@@ -333,9 +329,6 @@ int Game::shoot() const {
         return (0);
     }
     player->currentWeapon->bang(enemies, player);
-    if (player->currentWeapon->hasProjectiles) {
-        projectiles->push_back(player->currentWeapon->getProjectile());
-    }
     if (player->currentWeapon->empty == true) {
         player->reloadTime = GetTime();
     }

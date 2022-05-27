@@ -9,6 +9,7 @@
 
 wp_nadelauncher::wp_nadelauncher(const char* s, const char* r)
     : AWeapon(300.0f, 1, 30, 0.0, s, r, "nade", true) {}
+wp_nadelauncher::~wp_nadelauncher() {}
 
 int wp_nadelauncher::bang(std::vector<Entity>* enemies, Entity* player) {
     if (barrel == 0) {
