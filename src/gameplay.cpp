@@ -80,6 +80,7 @@ Game::Game(std::string const& path) {
     AWeapon* nadelauncher = new wp_nadelauncher(AR_BANG, SHOTTY_RELOAD);
     AWeapon* sling = new wp_enemysling(SHOTTY_BANG, SHOTTY_RELOAD);
 
+    // init minions
     for (auto i = 0; i < level->nMinion; i++) {
         Entity en(level->mHp);
         en.radius = level->mRadius;
@@ -88,6 +89,7 @@ Game::Game(std::string const& path) {
         en.currentWeapon = nullptr;
         enemies->push_back(en);
     }
+    // init bosses
     for (auto i = 0; i < level->nBoss; i++) {
         Entity en(level->bHp);
         en.radius = level->bRadius;
@@ -97,6 +99,7 @@ Game::Game(std::string const& path) {
         en.hurtTex = LoadTexture(BOSS_TEX_HURT);
         enemies->push_back(en);  // legacy code. TODO: remove AKchually no
     }
+    // init player
     player = new Entity();
     player->posX = 0;
     player->posY = SCREENHEIGHT / 2.0f;
@@ -112,20 +115,14 @@ Game::Game(std::string const& path) {
     player->idleTex = LoadTexture(MUCHACHO_TEX);
 
     crosshair = LoadTexture(CROSSHAIR_TEX);
+    nEnemies = level->nTotal;
 
+
+    // needed for mouse position referencing
     frameWidth = player->idleTex.width;
     frameHeight = player->idleTex.height;
-
     sourceRec = {0.0f, 0.0f, (float)frameWidth, (float)frameHeight};
-
     origin = {(float)frameWidth, (float)frameHeight};
-    nEnemies = level->nTotal;
-}
-
-Game::~Game() {
-    delete enemies;
-    delete player;
-    delete level;
 }
 
 // draw bad boys and player
@@ -189,7 +186,6 @@ int Game::tick() {
     // baddie logic
     //
 
-    // std::cerr << "DEBUG: start baddie move loop \n";
     for (auto en = enemies->begin(); en != enemies->end(); en++) {
         // std::cerr << "DEBUG: direction :" << en->direction.x<< "\n";
         if (en->hp > 0) {
@@ -349,4 +345,10 @@ std::string const& Game::getBackground() const {
 
 int const& Game::getKills() const {
     return player->victims;
+}
+
+Game::~Game() {
+    delete enemies;
+    delete player;
+    delete level;
 }

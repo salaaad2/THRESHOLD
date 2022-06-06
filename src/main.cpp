@@ -86,10 +86,10 @@ int main(void) {
 
                     CloseAudioDevice();
                     if (game->getNext() != "0") {
-						delete game;
+                        delete game;
                         game = new Game(next);
                         gs = GAMEPLAY;
-						std::cout << "next level " << next << std::endl;
+                        std::cout << "next level " << next << std::endl;
                     }
                 }
                 break;

@@ -3,6 +3,8 @@
 
 #include <raylib.h>
 
+// FIXME: Unused class
+
 typedef struct Projectile {
     int posX, posY;
     Vector2 dir;
