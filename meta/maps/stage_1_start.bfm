@@ -1,15 +1,5 @@
 BOSS 0 0
-MINIONS 10 20
+MINIONS 2 20
 WAVES 1 10
 NEXT stage_1_1.bfm
-BACKGROUND ../meta/media/sprites/stage_1_regbg.png
-
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+BACKGROUND meta/media/sprites/stage_1_regbg.png

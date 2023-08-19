@@ -12,7 +12,7 @@ wp_assaultrifle::wp_assaultrifle(const char* s, const char* r)
 wp_assaultrifle::~wp_assaultrifle() {}
 
 int wp_assaultrifle::bang(std::vector<Entity>* enemies, Entity* player) {
-    if (barrel == 0) {
+    if (barrel == 0 || player == nullptr) {
         return (1);
     } else {
         Vector2 playerDirection = Vector2Normalize(player->direction);

@@ -21,29 +21,27 @@
 #include <vector>
 
 // sound defines
-#define SHOTTY_BANG "../meta/media/mp3/shotty_shoot.mp3"
-#define SHOTTY_RELOAD "../meta/media/mp3/shotty_reload.mp3"
+#define SHOTTY_BANG "meta/media/mp3/shotty_shoot.mp3"
+#define SHOTTY_RELOAD "meta/media/mp3/shotty_reload.mp3"
 
-#define AR_BANG "../meta/media/mp3/ar_shoot.mp3"
-#define AR_RELOAD "../meta/media/mp3/shotty_reload.mp3"
+#define AR_BANG "meta/media/mp3/ar_shoot.mp3"
+#define AR_RELOAD "meta/media/mp3/shotty_reload.mp3"
 
 // player textures
-#define MUCHACHO_TEX "../meta/media/sprites/cowboy_idle.png"
+#define MUCHACHO_TEX "meta/media/sprites/cowboy_idle.png"
 
 // crosshair
-#define CROSSHAIR_TEX "../meta/media/sprites/crosshair.png"
+#define CROSSHAIR_TEX "meta/media/sprites/crosshair.png"
 
 // bad boy textures
-#define SBIRE_TEX_IDLE "../meta/media/sprites/sbire_idle.png"
-#define SBIRE_TEX_HURT "../meta/media/sprites/sbire_hurt.png"
+#define SBIRE_TEX_IDLE "meta/media/sprites/sbire_idle.png"
+#define SBIRE_TEX_HURT "meta/media/sprites/sbire_hurt.png"
 
 // boss textures
-#define BOSS_TEX_IDLE "../meta/media/sprites/boss_idle.png"
-#define BOSS_TEX_HURT "../meta/media/sprites/boss_hurt.png"
-#define BOSS_TEX_DEAD "../meta/media/sprites/boss_hurt.png"
+#define BOSS_TEX_IDLE "meta/media/sprites/boss_idle.png"
+#define BOSS_TEX_HURT "meta/media/sprites/boss_hurt.png"
+#define BOSS_TEX_DEAD "meta/media/sprites/boss_hurt.png"
 
-// #define COOLPURPLE \
-//     CLITERAL(Color) { 170, 153, 255, 255 }  // cool Purple
 #define COOLPURPLE \
     CLITERAL(Color) { 153, 0, 0, 255 }  // cool Purple
 

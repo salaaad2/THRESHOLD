@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.15)
 project(threshold)
 
-find_package(raylib 3.0 REQUIRED) # Requires at least version 3.0
+#find_package(raylib 3.0 REQUIRED) # Requires at least version 3.0
+
+add_subdirectory(raylib)
 
 set(CMAKE_C_STANDARD 11) # Requires C11 standard
 

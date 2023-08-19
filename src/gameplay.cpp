@@ -146,6 +146,7 @@ void Game::draw() {
             }
         }
     }
+
     // Destination rectangle
     Rectangle destRec = {player->posX, player->posY, frameWidth * 1.8f,
                          frameHeight * 1.8f};
@@ -153,9 +154,10 @@ void Game::draw() {
     // Origin of the texture (rotation/scale point), it's relative to
     // destination rectangle size
     DrawTexturePro(player->idleTex, sourceRec, destRec, origin,
-                   Vector2Angle((Vector2){0.0f, 0.0f}, player->direction),
+                   Vector2Angle((Vector2){0.0f, 0.0f}, player->direction) * 60.0,
                    WHITE);
 
+    DrawText(std::to_string(Vector2Angle((Vector2){0.0f, 0.0f}, player->direction)).c_str(), 30, 30, 20, GREEN);
     DrawText("Enemies left : ", 10, 10, 20, GREEN);
     DrawText(left.c_str(), 150, 10, 20, RED);
     if (player->fury >= 5) {
@@ -179,6 +181,7 @@ int Game::tick() {
     auto v2 = (Vector2){target.x - player->posX, target.y - player->posY};
 
     player->direction = v2;
+    std::cout << v2.x << v2.y << "\n" << std::flush;
 
     //
     // end player logic

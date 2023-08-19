@@ -25,9 +25,9 @@ int main(void) {
     auto nPick = 0;
     Texture2D background;
     Game* game = nullptr;
-    std::ofstream saveOut("../meta/maps/savestate");
+    std::ofstream saveOut("meta/maps/savestate");
 
-    std::string path = "../meta/maps";
+    std::string path = "meta/maps";
     int i = 0;
     for (const auto& entry :
          std::filesystem::directory_iterator(path)) {  // NOTE: c++17 lol
@@ -80,7 +80,7 @@ int main(void) {
             }
             case (NEXT): {
                 if (IsKeyPressed(KEY_ENTER)) {
-                    std::string next("../meta/maps/");
+                    std::string next("meta/maps/");
                     next += game->getNext();
                     saveOut << game->getCurrent();
 

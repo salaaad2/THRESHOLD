@@ -45,8 +45,4 @@ Entity::Entity(int const& h) : hp(h) {
 
 Entity::~Entity()
 {
-	for (auto it = wp.begin(); it != wp.end(); ++it)
-	{
-		delete it->second;
-	}
 }
